@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        extensions: ["tex2jax.js"],
+        jax: ["input/TeX", "output/HTML-CSS"],
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+          displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+          processEscapes: true
+        },
+        "HTML-CSS": { fonts: ["TeX"] }
+      });
+    </script>
+    <script
+      type="text/javascript"
+      async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-MML-AM_CHTML"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@curvenote/article/dist/curvenote.css"
+    />
+    <script src="https://unpkg.com/@curvenote/article"></script>
+    <!-- <script src="https://unpkg.com/thebe@latest/lib/index.js"></script> -->
+    <script src="./dist/lib/index.js"></script>
+    <style>
+      .hidden {
+        display: none;
+      }
+      .thebe-cell,
+      .jp-OutputArea > :first-child {
+        border: none;
+        border-top: none;
+        border-top-width: 0;
+      }
+      .thebe-input,
+      .thebe-button {
+        display: none;
+      }
+      .caption {
+        display: block;
+        font-family: sans-serif;
+        font-weight: 300;
+        font-size: 90%;
+      }
+      .thebe-status {
+        position: absolute;
+        top: -10px;
+        right: -150px;
+        zoom: 0.9;
+      }
+      .jp-OutputArea {
+        height: 256px;
+      }
+      .thebe-busy {
+        position: absolute;
+        left: 140px;
+        top: 80px;
+      }
+      .thebe-busy-spinner {
+        border: 6px solid #f3f3f3; /* Light grey */
+        border-top: 6px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 1s linear infinite;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="text/x-thebe-config">
+      {
+        requestKernel: true,
+        mountStatusWidget: true,
+        binderOptions: {
+            // binderUrl: "http://52.41.228.104:8000/services/binder/",
+            repo: "stevejpurves/base",
+            ref: "main",
+
+        },
+        mathjaxUrl: false
+      }
+    </script>
+    <article class="centered">
+      <h1>The Normal Distribution</h1>
+      <p class="subtitle">
+        An interactive article combininng Curvenote components and Jupyter code
+        execution and plotting.
+      </p>
+      <r-scope name="normal">
+        <p>
+          The Normal Distribution (also known as a Gaussian distribution) is a
+          second order statistical distribution parameterized by its Mean (mu,
+          $\mu$) and Standard Deviation (sigma, $\sigma$) as:
+        </p>
+        <p style="text-align: center">
+          $f(x)=\frac{1}{\sigma \sqrt{2 \pi}}
+          e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^{2}}$
+        </p>
+        <p>
+          Given a mean of
+          <r-dynamic
+            bind="mu"
+            min="-10"
+            max="10"
+            step="0.1"
+            :change="alert('change')"
+          ></r-dynamic>
+          and a standard deviation of
+          <r-dynamic bind="sigma" min="0.1" max="10" step="0.1"></r-dynamic> a
+          normal distribution look like this:
+        </p>
+        <div style="position: relative">
+          <pre data-executable class="hidden">
+%matplotlib inline
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy.stats as stats
+
+{{mu}}
+{{sigma}}
+
+plt.ion()
+fig, ax = plt.subplots()
+x = np.arange(-10,10,0.1)
+y = stats.norm.pdf(x, mu, sigma)
+ax.plot(x,y);
+plt.grid(True)
+        </pre
+          >
+          <div data-output="true">
+            <img src="output.png" />
+          </div>
+        </div>
+        <span class="caption">
+          A plot of the normal distribution for ($\mu$=<r-display
+            :value="mu"
+          ></r-display
+          >, $\sigma$=<r-display :value="sigma"></r-display>)
+        </span>
+        <p>
+          This is the familiar bell shaped curve which is characteristic of the
+          normal distribution in statistics, but also well known in other fields
+          as a Gaussian function aleit with variations on formalization,
+          notation and normalization.
+        </p>
+        <r-var name="mu" value="0"></r-var>
+        <r-var name="sigma" value="1"></r-var>
+      </r-scope>
+      <div class="thebe-status" />
+    </article>
+
+    <script>
+      function debounce(func, wait, immediate) {
+        var timeout;
+        return function () {
+          var context = this,
+            args = arguments;
+          var later = function () {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+          };
+          var callNow = immediate && !timeout;
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+          if (callNow) func.apply(context, args);
+        };
+      }
+    </script>
+    <script>
+      function replaceVariables(code, vars, lang = "python") {
+        return Object.values(vars).reduce((code, variable) => {
+          return code.replace(
+            `{{${variable.name}}}`,
+            `${variable.name} = ${variable.current}`
+          );
+        }, code);
+      }
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        thebelab.bootstrap();
+        thebelab.on("status", function (o) {
+          console.log("STATUS!", o);
+        });
+
+        curvenote.store.subscribe(
+          debounce(function () {
+            thebelab.cells.map((i, { cell, execute, setOutputText, cm }) => {
+              let code = cm.getValue();
+              code = replaceVariables(
+                code,
+                curvenote.store.getState().runtime.variables
+              );
+              execute(code);
+            });
+          }, 500)
+        );
+      });
+    </script>
+  </body>
+</html>
