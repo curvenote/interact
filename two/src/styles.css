@@ -5,6 +5,7 @@
 }
 
 .kernel-panel {
+  font-family: "Courier New", Courier, monospace;
   position: absolute;
   top: 24px;
   right: 0px;

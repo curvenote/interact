@@ -8,13 +8,7 @@ import "./styles.css";
 import { Provider } from "react-redux";
 import MyArticle from "./MyArticle";
 
-setupThebeCore(store, true);
-
-// TODO get off jsapi & get actions in place
-window.thebe_core.api.configure({
-  useBinder: true,
-  requestKernel: false,
-});
+setupThebeCore(store);
 
 function App() {
   return (

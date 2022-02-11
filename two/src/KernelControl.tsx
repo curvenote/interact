@@ -1,63 +1,85 @@
+import { nanoid } from "@reduxjs/toolkit";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Server } from "thebe-core";
+import {
+  getContext,
+  Server,
+  ThebeKernel,
+  selectors as thebeSelectors,
+} from "thebe-core";
+import { KernelStatus } from "thebe-core/dist/store/kernels";
 import { ServerStatus } from "thebe-core/dist/store/servers";
 import { actions, State } from "./store";
 
-const BINDER_INFO = {
-  repo: "binder-examples/requirements",
-  ref: "master",
-};
-
 function KernelPanel() {
-  const [serverId, setServerId] = useState<string | null>(null);
-  const [kernelNames, setKernelNames] = useState<string[]>([]);
-  const [defaultKernel, setDefaultKernel] = useState<string>("");
+  const [activeServerId, setActiveServerId] = useState<string | null>(null);
+  const [activeKernelId, setActiveKernelId] = useState<string | null>(null);
 
-  const clickConnect = async () => {
-    // TODO action - connectToBinder
-    // TODO pass the info in
-    // TODO get a serverId back
-    // TODO create kernel and attach to server
-    const server = await Server.connectToServerViaBinder(
-      window.thebe_core,
-      BINDER_INFO
-    );
-    setServerId(server.id);
+  const clickConnectServer = async () => {
+    const server = await Server.connectToServerViaBinder({
+      repo: "binder-examples/requirements",
+      ref: "master",
+    });
+    setActiveServerId(server.id);
   };
 
+  const clickConnectKernel = async (name: string) => {
+    if (activeServerId == null) return;
+    const kernel = new ThebeKernel(nanoid(), activeServerId);
+    const server = new Server(getContext(), activeServerId);
+    kernel.request(server, name);
+    setActiveKernelId(kernel.id);
+  };
+
+  const defaultKernelName = useSelector((state: State) =>
+    thebeSelectors.servers.getDefaultKernelName(state, activeServerId ?? "")
+  );
+
+  const kernelNames = useSelector((state: State) =>
+    thebeSelectors.servers.getKernelNames(state, activeServerId ?? "")
+  );
+
   const serverInfo = useSelector((state: State) => {
-    if (serverId === null) return;
-    return state.thebe.servers[serverId] ?? {};
+    if (activeServerId === null) return;
+    return state.thebe.servers[activeServerId] ?? {};
+  });
+
+  const kernelInfo = useSelector((state: State) => {
+    if (activeKernelId == null) return;
+    return state.thebe.kernels[activeKernelId] ?? {};
   });
 
   const serverReady = serverInfo?.status === ServerStatus.ready;
   useEffect(() => {
-    if (serverId == null) return;
-    const server = new Server(window.thebe_core, serverId);
-    server.fetchKernelNames().then((response) => {
-      setDefaultKernel(response.default);
-      setKernelNames(response.names);
-    });
-  }, [serverId, serverReady]);
+    if (activeServerId == null) return;
+    Server.fetchKernelNames(activeServerId);
+  }, [activeServerId, serverReady]);
 
-  const kernelButtons = kernelNames.map((name) => {
+  const kernelButtons = kernelNames.map((name: string) => {
     return (
-      <button key={name} title="click to connect">
-        {name === defaultKernel ? `${name}*` : name}
+      <button
+        key={name}
+        title="click to connect"
+        onClick={() => clickConnectKernel(name)}
+        disabled={!!activeKernelId}
+      >
+        {name === defaultKernelName ? `${name}*` : name}
       </button>
     );
   });
+
+  const kernelStatusColor =
+    kernelInfo?.status === KernelStatus.ready ? "green" : "orange";
 
   return (
     <div className="kernel-panel">
       <div>Servers:</div>
       <div>
-        <button onClick={clickConnect} disabled={!!serverInfo}>
+        <button onClick={clickConnectServer} disabled={!!serverInfo}>
           connect to binder
         </button>
         {serverInfo?.status && (
-          <div>
+          <div style={{ fontSize: "80%" }}>
             <div>Status: {serverInfo?.status}</div>
             <div>{serverInfo?.message}</div>
           </div>
@@ -67,6 +89,13 @@ function KernelPanel() {
         <div>
           <div>Available Kernels:</div>
           <div>{kernelButtons}</div>
+        </div>
+      )}
+      {kernelInfo?.status && (
+        <div>
+          <div style={{ color: kernelStatusColor }}>
+            Status: {kernelInfo?.status}
+          </div>
         </div>
       )}
     </div>
@@ -86,7 +115,7 @@ function KernelControl() {
           dispatch(actions.ui.kernelControls({ open: !openPanel }))
         }
       >
-        (s)
+        {">o<"}
       </button>
       {openPanel && <KernelPanel />}
     </div>

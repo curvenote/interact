@@ -75,7 +75,7 @@ export const fetchNotebook =
     // TODOquery api to get notebook data
 
     // load this into thebe
-    Notebook.fromCodeBlocks(window.thebe_core, notebook);
+    Notebook.fromCodeBlocks(notebook);
 
     return true;
   };
