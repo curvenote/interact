@@ -1,11 +1,29 @@
 import { configureStore, Store } from "@reduxjs/toolkit";
-import { reducers } from "./reducers";
 import { logger } from "./middleware";
+import runtime from "@curvenote/runtime";
+import { register as basicRegister } from "@curvenote/components";
+
+import { combineReducers } from "@reduxjs/toolkit";
+import { thebeReducer } from "thebe-core";
+import compute from "./compute";
+import ui from "./ui";
+
+export const reducers = combineReducers({
+  app: combineReducers({ ui: ui.reducer, compute: compute.reducer }),
+  thebe: thebeReducer,
+  runtime: runtime.reducer,
+});
 
 export const store = configureStore({
   reducer: reducers,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware()
+      .concat(logger)
+      .concat(runtime.triggerEvaluate)
+      .concat(runtime.dangerousEvaluatation),
 });
+
+basicRegister(store as any);
 
 declare global {
   interface Window {
