@@ -23,8 +23,7 @@
       href="https://unpkg.com/@curvenote/article/dist/curvenote.css"
     />
     <script src="https://unpkg.com/@curvenote/article"></script>
-    <!-- <script src="https://unpkg.com/thebe@latest/lib/index.js"></script> -->
-    <script src="./dist/lib/index.js"></script>
+    <script src="./lib/index.js"></script>
     <style>
       .hidden {
         display: none;
@@ -76,10 +75,9 @@
         requestKernel: true,
         mountStatusWidget: true,
         binderOptions: {
-            // binderUrl: "http://52.41.228.104:8000/services/binder/",
-            repo: "stevejpurves/base",
-            ref: "main",
-
+          // binderUrl: "http://52.41.228.104:8000/services/binder/",
+          repo: "binder-examples/requirements",
+          ref: "master",
         },
         mathjaxUrl: false
       }

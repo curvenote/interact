@@ -1,0 +1,28 @@
+.kernel-control {
+  position: fixed;
+  top: 5px;
+  right: 5px;
+}
+
+.kernel-panel {
+  position: absolute;
+  top: 24px;
+  right: 0px;
+  min-width: 200px;
+  min-height: 200px;
+  background-color: white;
+  border: 1px solid gray;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.kernel-panel > div {
+  margin-top: 5px;
+}
+
+.output {
+  width: 100%;
+  min-height: 40px;
+}
