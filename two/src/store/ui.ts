@@ -1,16 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// All Cells are code
-export interface CellInfo {
-  id: string;
-  code: string;
-}
-
-export interface NotebookInfo {
-  id: string;
-  cells: CellInfo[]; // TODO dag should just store cell ids and cells exist in separate subtree
-}
-
 export interface UIState {
   kernelControls: {
     open: boolean;

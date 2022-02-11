@@ -1,4 +1,6 @@
+import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
 import Notebook from "thebe-core/dist/notebook";
+import compute from "./compute";
 import { AppDispatch, State } from "./index";
 import ui from "./ui";
 
@@ -7,7 +9,7 @@ interface CodeBlock {
   source: string;
 }
 
-const notebook: CodeBlock[] = [
+const notebookData: CodeBlock[] = [
   {
     id: "curvenote-cell-id-1",
     source: `
@@ -36,7 +38,7 @@ plt.figure(figsize=(16,5))
 plt.bar(range(0,len(c)), c)
 plt.grid()
 mm = 1.1*np.max(np.abs(plt.ylim()))
-plt.ylim(-mm,mm)
+plt.ylim(-mm,mm);
 `,
   },
   {
@@ -60,7 +62,7 @@ if N < 15:
   {
     id: "curvenote-cell-id-6",
     source: `
-Xs = np.sum(X, axis=0)
+Xs = np.sum(X, axis=0);
 plt.figure(figsize=(16,5))
 plt.plot(t,Xs)
 plt.grid()
@@ -71,15 +73,13 @@ plt.title(f'Sum of the first {N} Fourier Series Coefficients for an even square 
 ];
 
 export const fetchNotebook =
-  () => async (dispatch: AppDispatch, getState: State) => {
-    // TODOquery api to get notebook data
-
-    // load this into thebe
-    Notebook.fromCodeBlocks(notebook);
-
-    return true;
+  (): ThunkAction<Promise<Notebook>, State, unknown, AnyAction> =>
+  async (): Promise<Notebook> => {
+    // TODO query api to get notebookData
+    // load data into thebe
+    return Notebook.fromCodeBlocks(notebookData); // TODO will be a thunk
   };
 
-const actions = { ui: ui.actions };
+const actions = { ui: ui.actions, compute: compute.actions };
 
 export default actions;

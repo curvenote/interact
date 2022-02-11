@@ -9,18 +9,20 @@ import {
 } from "thebe-core";
 import { KernelStatus } from "thebe-core/dist/store/kernels";
 import { ServerStatus } from "thebe-core/dist/store/servers";
-import { actions, State } from "./store";
+import { actions, selectors, State } from "./store";
 
 function KernelPanel() {
-  const [activeServerId, setActiveServerId] = useState<string | null>(null);
-  const [activeKernelId, setActiveKernelId] = useState<string | null>(null);
+  const dispatch = useDispatch();
 
-  const clickConnectServer = async () => {
+  const activeServerId = useSelector(selectors.compute.getActiveServerId);
+  const activeKernelId = useSelector(selectors.compute.getActiveKernelId);
+
+  const clickConnectBinder = async () => {
     const server = await Server.connectToServerViaBinder({
       repo: "binder-examples/requirements",
       ref: "master",
     });
-    setActiveServerId(server.id);
+    dispatch(actions.compute.setActiveServerId(server.id));
   };
 
   const clickConnectKernel = async (name: string) => {
@@ -28,7 +30,7 @@ function KernelPanel() {
     const kernel = new ThebeKernel(nanoid(), activeServerId);
     const server = new Server(getContext(), activeServerId);
     kernel.request(server, name);
-    setActiveKernelId(kernel.id);
+    dispatch(actions.compute.setActiveKernelId(kernel.id));
   };
 
   const defaultKernelName = useSelector((state: State) =>
@@ -40,12 +42,12 @@ function KernelPanel() {
   );
 
   const serverInfo = useSelector((state: State) => {
-    if (activeServerId === null) return;
-    return state.thebe.servers[activeServerId] ?? {};
+    if (!activeServerId) return;
+    return state.thebe.servers[activeServerId];
   });
 
   const kernelInfo = useSelector((state: State) => {
-    if (activeKernelId == null) return;
+    if (!activeKernelId) return;
     return state.thebe.kernels[activeKernelId] ?? {};
   });
 
@@ -75,7 +77,7 @@ function KernelPanel() {
     <div className="kernel-panel">
       <div>Servers:</div>
       <div>
-        <button onClick={clickConnectServer} disabled={!!serverInfo}>
+        <button onClick={clickConnectBinder} disabled={!!serverInfo}>
           connect to binder
         </button>
         {serverInfo?.status && (
