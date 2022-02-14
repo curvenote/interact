@@ -8,7 +8,7 @@ import "./styles.css";
 import { Provider } from "react-redux";
 import MyArticle from "./MyArticle";
 
-setupThebeCore(store);
+setupThebeCore(store, true);
 
 function App() {
   return (

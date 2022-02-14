@@ -1,29 +1,41 @@
 import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import Notebook from "thebe-core/dist/notebook";
+import { getContext } from "thebe-core";
 import { selectors } from "./store";
 
-function Output({ notebook, cellId }: { notebook?: Notebook; cellId: string }) {
+function Output({
+  notebookId,
+  cellId,
+  runButton,
+}: {
+  notebookId?: string;
+  cellId: string;
+  runButton?: boolean;
+}) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (ref.current == null || !notebook) return;
+    if (ref.current == null || !notebookId) return;
     console.log(`Cell ${cellId} side effect`, ref);
+    const ctx = getContext();
+    const notebook = ctx.notebooks[notebookId];
     const cell = notebook.getCellById(cellId);
     cell?.attach(ref.current);
-  }, [!notebook, cellId]);
+  }, [notebookId, cellId]);
 
   const activeKernelId = useSelector(selectors.compute.getActiveKernelId);
 
   const clickPlay = () => {
     console.log("click play", activeKernelId, cellId);
-    if (!activeKernelId) return;
+    if (!activeKernelId || !notebookId) return;
+    const ctx = getContext();
+    const notebook = ctx.notebooks[notebookId];
     notebook?.exectuteUpTo(activeKernelId, cellId, {});
   };
 
   return (
     <div className="output">
-      <button onClick={clickPlay}>{">"}</button>
+      {runButton && <button onClick={clickPlay}>{">"}</button>}
       <div ref={ref}>
         <div>OUTPUT: {cellId}</div>
       </div>

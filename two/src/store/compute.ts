@@ -4,6 +4,7 @@ import { State } from "./setup";
 export interface ComputeState {
   activeServerId?: string;
   activeKernelId?: string;
+  activeNotebookId?: string;
 }
 
 const compute = createSlice({
@@ -22,15 +23,27 @@ const compute = createSlice({
         activeKernelId: action.payload,
       };
     },
+    setActiveNotebookId: (
+      state: ComputeState,
+      action: PayloadAction<string>
+    ) => {
+      return {
+        ...state,
+        activeNotebookId: action.payload,
+      };
+    },
   },
 });
 
 const getActiveServerId = (state: State) => state.app.compute.activeServerId;
 const getActiveKernelId = (state: State) => state.app.compute.activeKernelId;
+const getActiveNotebookId = (state: State) =>
+  state.app.compute.activeNotebookId;
 
 export const selectors = {
   getActiveServerId,
   getActiveKernelId,
+  getActiveNotebookId,
 };
 
 export default compute;

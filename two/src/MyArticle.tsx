@@ -1,27 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Notebook from "thebe-core/dist/notebook";
+import RDisplay from "./components/RDisplay";
+import RDynamic from "./components/RDynamic";
+import RVar from "./components/RVar";
 import KernelControl from "./KernelControl";
+import MakeLive from "./MakeLive";
 import Output from "./Output";
-import RunAll from "./RunAll";
-import { AppDispatch } from "./store";
-import { fetchNotebook } from "./store/actions";
+import { AppDispatch, selectors } from "./store";
+import actions, { fetchNotebook } from "./store/actions";
 
 function MyArticle() {
   const dispatch = useDispatch<AppDispatch>();
-  const [notebook, setNotebook] = useState<Notebook | undefined>(undefined);
+  const notebookId = useSelector(selectors.compute.getActiveNotebookId);
 
   useEffect(() => {
     dispatch(fetchNotebook()).then((nb: Notebook) => {
-      setNotebook(nb);
+      dispatch(actions.compute.setActiveNotebookId(nb.id));
     });
   }, []);
 
   return (
-    <article className="centered">
-      <r-scope name="page">
+    <r-scope name="page">
+      <RVar name="wo" value={0.5} format=".2f"></RVar>
+      <article className="centered">
         <KernelControl />
-        <RunAll notebook={notebook} />
+        <MakeLive notebookId={notebookId} />
         <h1>Fourier Series</h1>
         <p>
           Fourier series (and the related Fourier Transforms, more on those in
@@ -33,15 +37,26 @@ function MyArticle() {
         </p>
         <h2>An Example</h2>
         <p>TODO some maths!</p>
+        <p>
+          Given that <em>wo</em> is <RDisplay bindToValue="wo"></RDisplay> and I
+          can change its value{" "}
+          <RDynamic
+            bind="wo"
+            min={0.05}
+            max={1.0}
+            step={0.05}
+            format=".2f"
+          ></RDynamic>
+        </p>
         <h2>The Series Components</h2>
         <p>Explanation of the series and adding some controls</p>
-        <Output notebook={notebook} cellId="curvenote-cell-id-5" />
+        <Output notebookId={notebookId} cellId="curvenote-cell-id-5" />
         <h2>The Composite Signal</h2>
-        <Output notebook={notebook} cellId="curvenote-cell-id-6" />
+        <Output notebookId={notebookId} cellId="curvenote-cell-id-6" />
         <h2>The Coefficients</h2>
-        <Output notebook={notebook} cellId="curvenote-cell-id-4" />
-      </r-scope>
-    </article>
+        <Output notebookId={notebookId} cellId="curvenote-cell-id-4" />
+      </article>
+    </r-scope>
   );
 }
 

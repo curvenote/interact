@@ -25,6 +25,15 @@ function KernelPanel() {
     dispatch(actions.compute.setActiveServerId(server.id));
   };
 
+  const clickConnectJupyter = async () => {
+    const server = await Server.connectToServer({
+      appendToken: true,
+      baseUrl: "http://localhost:8888",
+      token: "test-secret",
+    });
+    dispatch(actions.compute.setActiveServerId(server.id));
+  };
+
   const clickConnectKernel = async (name: string) => {
     if (activeServerId == null) return;
     const kernel = new ThebeKernel(nanoid(), activeServerId);
@@ -79,6 +88,9 @@ function KernelPanel() {
       <div>
         <button onClick={clickConnectBinder} disabled={!!serverInfo}>
           connect to binder
+        </button>
+        <button onClick={clickConnectJupyter} disabled={!!serverInfo}>
+          connect to jupyter (local)
         </button>
         {serverInfo?.status && (
           <div style={{ fontSize: "80%" }}>
