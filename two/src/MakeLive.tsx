@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getContext } from "thebe-core";
 import { actions, selectors } from "./store";
 
 const MakeLive = ({ notebookId }: { notebookId?: string }) => {
@@ -10,7 +11,8 @@ const MakeLive = ({ notebookId }: { notebookId?: string }) => {
   const clickMakeLive = () => {
     if (!activeKernelId || !notebookId) return;
     dispatch(actions.ui.setIsLive(true));
-    // notebookId?.executeAll(activeKernelId, {});
+    const ctx = getContext();
+    ctx.notebooks[notebookId]?.executeAll(activeKernelId);
   };
 
   const notLive = "--o--";

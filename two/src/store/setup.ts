@@ -1,5 +1,9 @@
 import { configureStore, Store } from "@reduxjs/toolkit";
-import { LivePageInvoker, logger } from "./middleware";
+import {
+  InterpolationInitializer,
+  LivePageInvoker,
+  logger,
+} from "./middleware";
 import runtime from "@curvenote/runtime";
 import { register as basicRegister } from "@curvenote/components";
 
@@ -21,6 +25,7 @@ export const store = configureStore({
       .concat(logger)
       .concat(runtime.triggerEvaluate)
       .concat(runtime.dangerousEvaluatation)
+      .concat(InterpolationInitializer)
       .concat(LivePageInvoker),
 });
 

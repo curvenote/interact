@@ -8,7 +8,7 @@ const RunAll = ({ notebook }: { notebook?: Notebook }) => {
 
   const clickRunAll = () => {
     if (!activeKernelId || !notebook) return;
-    notebook?.executeAll(activeKernelId, {});
+    notebook?.executeAll(activeKernelId);
   };
 
   return (

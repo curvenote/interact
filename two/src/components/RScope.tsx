@@ -1,5 +1,6 @@
 export interface RScopeProps {
   name: string;
+  children: JSX.Element[];
 }
 
 declare global {
@@ -13,8 +14,8 @@ declare global {
   }
 }
 
-function RScope({ name }: RScopeProps) {
-  return <r-scope name={name}></r-scope>;
+function RScope({ name, children }: RScopeProps) {
+  return <r-scope name={name}>{children}</r-scope>;
 }
 
 export default RScope;

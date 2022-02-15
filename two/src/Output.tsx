@@ -7,10 +7,12 @@ function Output({
   notebookId,
   cellId,
   runButton,
+  placeholder,
 }: {
   notebookId?: string;
   cellId: string;
   runButton?: boolean;
+  placeholder?: React.ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -30,15 +32,13 @@ function Output({
     if (!activeKernelId || !notebookId) return;
     const ctx = getContext();
     const notebook = ctx.notebooks[notebookId];
-    notebook?.exectuteUpTo(activeKernelId, cellId, {});
+    notebook?.executeUpTo(activeKernelId, cellId);
   };
 
   return (
-    <div className="output">
+    <div className="output" style={{ minHeight: 325 }}>
       {runButton && <button onClick={clickPlay}>{">"}</button>}
-      <div ref={ref}>
-        <div>OUTPUT: {cellId}</div>
-      </div>
+      <div ref={ref}>{placeholder}</div>
     </div>
   );
 }

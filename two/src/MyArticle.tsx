@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Notebook from "thebe-core/dist/notebook";
+import { RScope } from "./components";
 import RDisplay from "./components/RDisplay";
 import RDynamic from "./components/RDynamic";
 import RVar from "./components/RVar";
@@ -21,7 +22,7 @@ function MyArticle() {
   }, []);
 
   return (
-    <r-scope name="page">
+    <RScope name="page">
       <RVar name="wo" value={0.5} format=".2f"></RVar>
       <article className="centered">
         <KernelControl />
@@ -50,13 +51,27 @@ function MyArticle() {
         </p>
         <h2>The Series Components</h2>
         <p>Explanation of the series and adding some controls</p>
-        <Output notebookId={notebookId} cellId="curvenote-cell-id-5" />
+        <Output
+          notebookId={notebookId}
+          cellId="curvenote-cell-id-5"
+          placeholder={<img src="components.png" alt="fourier components" />}
+        />
         <h2>The Composite Signal</h2>
-        <Output notebookId={notebookId} cellId="curvenote-cell-id-6" />
+        <Output
+          notebookId={notebookId}
+          cellId="curvenote-cell-id-6"
+          placeholder={<img src="composite.png" alt="composite signal" />}
+        />
         <h2>The Coefficients</h2>
-        <Output notebookId={notebookId} cellId="curvenote-cell-id-4" />
+        <Output
+          notebookId={notebookId}
+          cellId="curvenote-cell-id-4"
+          placeholder={
+            <img src="coefficients.png" alt="fourier series coefficients" />
+          }
+        />
       </article>
-    </r-scope>
+    </RScope>
   );
 }
 

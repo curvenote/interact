@@ -21,10 +21,11 @@ import numpy as np
   {
     id: "curvenote-cell-id-2",
     source: `
-A = 1 # curvenote:A min:0
-T = 0.5 # curvenote:T min:0 max:1
-wo = 1*math.pi # curvenote:(wo)*2*math.pi min:0 max:1
-N = 20 # curvenote:N min:1
+A = 1 # @param
+T = 0.5 # @param
+wo = 0.5 # @param
+wo = wo*2*math.pi
+N = 20 # @param
 `,
   },
   {
