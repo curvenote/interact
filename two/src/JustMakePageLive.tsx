@@ -41,8 +41,8 @@ function JustMakePageLive({ notebookId }: { notebookId?: string }) {
     if (!notebookId || requested) return;
     setRequested(true);
     const server = await connectToPublicBinder();
+    // const server = await connectToLocalServer();
     dispatch(actions.compute.setActiveServerId(server.id));
-    // await connectToLocalServer();
 
     const kernel = await connectToKernel(server.id, kernelName);
     dispatch(actions.compute.setActiveKernelId(kernel.id));
