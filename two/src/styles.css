@@ -44,7 +44,8 @@
 }
 
 .just-make-live-button:active:enabled {
-  background-color: lightgreen;
+  color: lightgreen;
+  border-color: lightgreen;
 }
 
 @keyframes thebefade {

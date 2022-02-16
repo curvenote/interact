@@ -22,7 +22,7 @@ import numpy as np
     id: "curvenote-cell-id-2",
     source: `
 A = 1 # @param
-T = 0.5 # @param
+Tp = 0.5 # @param
 wo = 0.5 # @param
 wo = wo*2*math.pi
 N = 20 # @param
@@ -30,7 +30,7 @@ N = 20 # @param
   },
   {
     id: "curvenote-cell-id-3",
-    source: `c = [(A/(math.pi*(n+1)))*math.sin((n+1)*wo*(T/2)) for n in range(0,N)]`,
+    source: `c = [(A/(math.pi*(n+1)))*math.sin((n+1)*wo*(Tp/2)) for n in range(0,N)]`,
   },
   {
     id: "curvenote-cell-id-4",

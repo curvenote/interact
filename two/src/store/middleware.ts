@@ -2,8 +2,8 @@ import { AnyAction } from "@reduxjs/toolkit";
 import { getContext } from "thebe-core";
 import { selectors } from "./selectors";
 import { selectors as thebeSelectors } from "thebe-core";
-import runtime from "@curvenote/runtime";
 import throttle from "lodash.throttle";
+import debounce from "lodash.debounce";
 import Interpolator, { ValueMap } from "../Interpolator";
 
 /**
@@ -18,7 +18,7 @@ export const logger = (store: any) => (next: any) => (action: AnyAction) => {
   return result;
 };
 
-const INVOKER_THROTTLE = 300;
+const INVOKER_THROTTLE = 150;
 function executeFn(
   notebookId: string,
   kernelId: string,
@@ -29,6 +29,7 @@ function executeFn(
 }
 
 const throttledExecFn = throttle(executeFn, INVOKER_THROTTLE);
+const debouncedExecFn = debounce(executeFn, INVOKER_THROTTLE);
 
 const interpolator = new Interpolator();
 
@@ -79,8 +80,8 @@ export const LivePageInvoker =
         selectors.compute.getActiveKernelId(state)
       ) {
         if (notebookId && kernelId) {
-          console.log("Execute!!");
-          throttledExecFn(
+          console.log(`Middleware executing notebook ${notebookId}`);
+          debouncedExecFn(
             notebookId,
             kernelId,
             interpolator.createPreprocessor(values)
