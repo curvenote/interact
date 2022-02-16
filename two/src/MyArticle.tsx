@@ -5,11 +5,11 @@ import { RScope } from "./components";
 import RDisplay from "./components/RDisplay";
 import RDynamic from "./components/RDynamic";
 import RVar from "./components/RVar";
-import KernelControl from "./KernelControl";
-import MakeLive from "./MakeLive";
 import Output from "./Output";
 import { AppDispatch, selectors } from "./store";
 import actions, { fetchNotebook } from "./store/actions";
+import "thebe-core/dist/index.css";
+import JustMakePageLive from "./JustMakePageLive";
 
 function MyArticle() {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,8 +25,9 @@ function MyArticle() {
     <RScope name="page">
       <RVar name="wo" value={0.5} format=".2f"></RVar>
       <article className="centered">
-        <KernelControl />
-        <MakeLive notebookId={notebookId} />
+        <JustMakePageLive notebookId={notebookId} />
+        {/* <KernelControl /> */}
+        {/* <MakeLive notebookId={notebookId} /> */}
         <h1>Fourier Series</h1>
         <p>
           Fourier series (and the related Fourier Transforms, more on those in
@@ -39,13 +40,14 @@ function MyArticle() {
         <h2>An Example</h2>
         <p>TODO some maths!</p>
         <p>
-          Given that <em>wo</em> is <RDisplay bindToValue="wo"></RDisplay> and I
-          can change its value{" "}
+          Given that <em>wo</em> is{" "}
+          <RDisplay bindToValue="wo" format=".2f"></RDisplay> and I can change
+          its value{" "}
           <RDynamic
             bind="wo"
-            min={0.05}
-            max={1.0}
-            step={0.05}
+            min={0.01}
+            max={0.5}
+            step={0.01}
             format=".2f"
           ></RDynamic>
         </p>

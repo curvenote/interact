@@ -36,7 +36,7 @@ function Output({
   };
 
   return (
-    <div className="output" style={{ minHeight: 325 }}>
+    <div className="output">
       {runButton && <button onClick={clickPlay}>{">"}</button>}
       <div ref={ref}>{placeholder}</div>
     </div>

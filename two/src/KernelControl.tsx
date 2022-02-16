@@ -10,6 +10,11 @@ import {
 import { KernelStatus } from "thebe-core/dist/store/kernels";
 import { ServerStatus } from "thebe-core/dist/store/servers";
 import { actions, selectors, State } from "./store";
+import {
+  connectToKernel,
+  connectToLocalServer,
+  connectToPublicBinder,
+} from "./utils";
 
 function KernelPanel() {
   const dispatch = useDispatch();
@@ -18,27 +23,18 @@ function KernelPanel() {
   const activeKernelId = useSelector(selectors.compute.getActiveKernelId);
 
   const clickConnectBinder = async () => {
-    const server = await Server.connectToServerViaBinder({
-      repo: "binder-examples/requirements",
-      ref: "master",
-    });
+    const server = await connectToPublicBinder();
     dispatch(actions.compute.setActiveServerId(server.id));
   };
 
   const clickConnectJupyter = async () => {
-    const server = await Server.connectToServer({
-      appendToken: true,
-      baseUrl: "http://localhost:8888",
-      token: "test-secret",
-    });
+    const server = await connectToLocalServer();
     dispatch(actions.compute.setActiveServerId(server.id));
   };
 
   const clickConnectKernel = async (name: string) => {
     if (activeServerId == null) return;
-    const kernel = new ThebeKernel(nanoid(), activeServerId);
-    const server = new Server(getContext(), activeServerId);
-    kernel.request(server, name);
+    const kernel = await connectToKernel(activeServerId, name);
     dispatch(actions.compute.setActiveKernelId(kernel.id));
   };
 
