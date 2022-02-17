@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { nanoid } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -37,21 +37,35 @@ function JustMakePageLive({ notebookId }: { notebookId?: string }) {
     return state.thebe.kernels[activeKernelId] ?? {};
   });
 
+  // TODO usePublicBinder hook
   const clickMakeLive = async () => {
     if (!notebookId || requested) return;
     setRequested(true);
     const server = await connectToPublicBinder();
     // const server = await connectToLocalServer();
     dispatch(actions.compute.setActiveServerId(server.id));
-
-    const kernel = await connectToKernel(server.id, kernelName);
-    dispatch(actions.compute.setActiveKernelId(kernel.id));
-
-    const ctx = getContext();
-    await ctx.notebooks[notebookId]?.executeAll(kernel.id);
-
-    dispatch(actions.ui.setIsLive(true));
   };
+
+  useEffect(() => {
+    if (!activeServerId || serverInfo?.status !== ServerStatus.ready) return;
+    connectToKernel(activeServerId, kernelName).then((kernel) => {
+      dispatch(actions.compute.setActiveKernelId(kernel.id));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeServerId, serverInfo?.status]);
+
+  useEffect(() => {
+    if (
+      !notebookId ||
+      !activeKernelId ||
+      kernelInfo?.status !== KernelStatus.ready
+    )
+      return;
+    const ctx = getContext();
+    ctx.notebooks[notebookId]?.executeAll(activeKernelId);
+    dispatch(actions.ui.setIsLive(true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [notebookId, activeKernelId, kernelInfo?.status]);
 
   let message = "Click to connect to a server/kernel and make the page live";
   if (serverInfo && serverInfo?.status !== ServerStatus.ready)
