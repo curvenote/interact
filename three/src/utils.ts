@@ -3,8 +3,10 @@ import { getContext, Server, ThebeKernel } from "thebe-core";
 
 export async function connectToPublicBinder() {
   return Server.connectToServerViaBinder({
-    repo: "binder-examples/requirements",
-    ref: "master",
+    // repo: "binder-examples/requirements",
+    // ref: "master",
+    repo: "stevejpurves/iempymod",
+    ref: "main",
   });
 }
 

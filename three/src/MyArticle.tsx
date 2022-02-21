@@ -9,7 +9,6 @@ import { AppDispatch, selectors } from "./store";
 import actions, { fetchNotebook } from "./store/actions";
 import "thebe-core/dist/index.css";
 import JustMakePageLive from "./JustMakePageLive";
-import RAction from "./components/RAction";
 
 function MyArticle() {
   const dispatch = useDispatch<AppDispatch>();

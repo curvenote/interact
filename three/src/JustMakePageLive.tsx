@@ -10,12 +10,9 @@ function JustMakePageLive({ notebookId }: { notebookId?: string }) {
 
   const kernelName = "python3";
 
-  // const { requested, serverInfo } = usePublicBinder(
-  //   connect,
-  //   notebookId,
-  // );
+  const { requested, serverInfo } = usePublicBinder(connect, notebookId);
 
-  const { requested, serverInfo } = useLocalJupyter(connect, notebookId);
+  // const { requested, serverInfo } = useLocalJupyter(connect, notebookId);
 
   const { kernelInfo, isLive } = useJupyterKernel(
     serverInfo?.status === ServerStatus.ready,
