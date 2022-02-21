@@ -1,0 +1,105 @@
+.kernel-control {
+  position: fixed;
+  top: 5px;
+  right: 5px;
+}
+
+.just-make-live {
+  position: fixed;
+  top: 5px;
+  right: 5px;
+}
+
+.just-make-live-button {
+  background-color: white;
+  border: 1px gray solid;
+  padding: 10px 12px 7px 12px;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 120%;
+}
+
+.just-make-live-requested {
+  color: orange;
+  border-color: orange;
+}
+
+.just-make-live-error {
+  color: red;
+  border-color: red;
+}
+
+.just-make-live-connected {
+  color: green;
+  border-color: green;
+}
+
+.just-make-live-button:disabled {
+  border: 1px lightgray solid;
+}
+
+.just-make-live-button:hover:enabled {
+  border-color: dodgerblue;
+  color: dodgerblue;
+}
+
+.just-make-live-button:active:enabled {
+  color: lightgreen;
+  border-color: lightgreen;
+}
+
+@keyframes thebefade {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.just-make-live:hover .just-make-live-panel {
+  visibility: visible;
+  opacity: 1;
+}
+
+.just-make-live-panel {
+  visibility: hidden;
+  position: absolute;
+  top: 50px;
+  right: 5px;
+  background-color: white;
+  border: 1px lightgray solid;
+  min-width: 150px;
+  min-height: 20px;
+  font-size: 80%;
+  padding: 8px;
+}
+
+.kernel-panel {
+  font-family: "Courier New", Courier, monospace;
+  position: absolute;
+  top: 24px;
+  right: 0px;
+  min-width: 200px;
+  min-height: 200px;
+  background-color: white;
+  border: 1px solid gray;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.kernel-panel > div {
+  margin-top: 5px;
+}
+
+.output {
+  width: 100%;
+  min-height: 40px;
+}
+
+r-var {
+  display: block;
+}
