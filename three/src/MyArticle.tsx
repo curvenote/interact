@@ -4,19 +4,19 @@ import Notebook from "thebe-core/dist/notebook";
 import { RDisplay, RScope } from "./components";
 import RDynamic from "./components/RDynamic";
 import RVar from "./components/RVar";
-import Output from "./Output";
-import { AppDispatch, selectors } from "./store";
-import actions, { fetchNotebook } from "./store/actions";
+import Output from "./connect/react/Output";
+import { AppDispatch } from "./store";
+import { fetchNotebook, selectors, connect } from "./connect/redux";
 import "thebe-core/dist/index.css";
-import JustMakePageLive from "./JustMakePageLive";
+import JustMakePageLive from "./connect/react/JustMakePageLive";
 
 function MyArticle() {
   const dispatch = useDispatch<AppDispatch>();
-  const notebookId = useSelector(selectors.compute.getActiveNotebookId);
+  const notebookId = useSelector(selectors.getActiveNotebookId);
 
   useEffect(() => {
     dispatch(fetchNotebook()).then((nb: Notebook) => {
-      dispatch(actions.compute.setActiveNotebookId(nb.id));
+      dispatch(connect.actions.setActiveNotebookId(nb.id));
     });
   }, []);
 

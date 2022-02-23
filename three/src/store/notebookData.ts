@@ -1,4 +1,4 @@
-import { CodeBlock } from "./actions";
+import { CodeBlock } from "../connect/redux/actions";
 
 export const notebookData: CodeBlock[] = [
   {

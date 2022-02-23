@@ -1,8 +1,7 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import { getContext } from "thebe-core";
-import { selectors } from "./selectors";
+import { selectors } from "./connect";
 import { selectors as thebeSelectors } from "thebe-core";
-import throttle from "lodash.throttle";
 import debounce from "lodash.debounce";
 import Interpolator, { ValueMap } from "../Interpolator";
 
@@ -58,8 +57,8 @@ export const LivePageInvoker =
       const state = store.getState();
 
       // get active notebook and execute all
-      const notebookId = selectors.compute.getActiveNotebookId(state);
-      const kernelId = selectors.compute.getActiveKernelId(state);
+      const notebookId = selectors.getActiveNotebookId(state);
+      const kernelId = selectors.getActiveKernelId(state);
 
       // TODO better way to access with types
       const values = Object.entries(
@@ -74,10 +73,7 @@ export const LivePageInvoker =
 
       console.log("interpolating with values", values);
 
-      if (
-        selectors.ui.getIsLive(state) &&
-        selectors.compute.getActiveKernelId(state)
-      ) {
+      if (selectors.getActiveKernelId(state)) {
         if (notebookId && kernelId) {
           console.log(`Middleware executing notebook ${notebookId}`);
           debouncedExecFn(

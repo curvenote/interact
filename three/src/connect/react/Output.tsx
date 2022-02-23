@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { getContext } from "thebe-core";
-import { selectors } from "./store";
+import { selectors as connectSelectors } from "../redux";
 
 function Output({
   notebookId,
@@ -25,7 +25,7 @@ function Output({
     cell?.attach(ref.current);
   }, [notebookId, cellId]);
 
-  const activeKernelId = useSelector(selectors.compute.getActiveKernelId);
+  const activeKernelId = useSelector(connectSelectors.getActiveKernelId);
 
   const clickPlay = () => {
     console.log("click play", activeKernelId, cellId);

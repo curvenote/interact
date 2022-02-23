@@ -3,7 +3,7 @@ import "./App.css";
 import { setupThebeCore } from "thebe-core";
 import { store } from "./store";
 import "@curvenote/article/dist/curvenote.css";
-import "./styles.css";
+import "./connect/styles.css";
 
 import { Provider } from "react-redux";
 import MyArticle from "./MyArticle";

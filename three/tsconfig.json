@@ -16,7 +16,10 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "types": ["JSX", "@types/jest", "@types/node"],
-    "typeRoots": ["./types"]
+    "typeRoots": ["./types"],
+    "paths": {
+      "~/*": ["src/*"]
+    }
   },
   "include": ["src"]
 }

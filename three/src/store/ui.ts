@@ -5,7 +5,6 @@ export interface UIState {
   kernelControls: {
     open: boolean;
   };
-  isLive: boolean;
 }
 
 const ui = createSlice({
@@ -14,7 +13,6 @@ const ui = createSlice({
     kernelControls: {
       open: false,
     },
-    isLive: false,
   } as UIState,
   reducers: {
     kernelControls: (
@@ -30,20 +28,9 @@ const ui = createSlice({
         },
       };
     },
-    setIsLive: (state: UIState, action: PayloadAction<boolean>) => {
-      if (state.isLive === action.payload) return state;
-      return {
-        ...state,
-        isLive: action.payload,
-      };
-    },
   },
 });
 
-const getIsLive = (state: State) => state.app.ui.isLive;
-
-export const selectors = {
-  getIsLive,
-};
+export const selectors = {};
 
 export default ui;

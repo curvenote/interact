@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getContext } from "thebe-core";
-import { KernelInfo, KernelStatus } from "thebe-core";
-import { ServerInfo, ServerStatus } from "thebe-core";
-import { actions, selectors, State } from "./store";
+import { ServerInfo, KernelStatus } from "thebe-core";
+import { State } from "../../store";
+import { selectors, connect } from "../redux";
 import {
   connectToKernel,
   connectToLocalServer,
   connectToPublicBinder,
-} from "./utils";
+} from "../utils";
 
 function usePublicBinder(
-  connect: boolean,
+  start: boolean,
   notebookId?: string
 ): {
   requested: boolean;
@@ -20,7 +20,7 @@ function usePublicBinder(
   const [requested, setRequested] = useState(false);
   const dispatch = useDispatch();
 
-  const activeServerId = useSelector(selectors.compute.getActiveServerId);
+  const activeServerId = useSelector(selectors.getActiveServerId);
 
   const serverInfo = useSelector((state: State) => {
     if (!activeServerId) return;
@@ -28,22 +28,22 @@ function usePublicBinder(
   });
 
   useEffect(() => {
-    if (!notebookId || requested || !connect) return;
+    if (!notebookId || requested || !start) return;
     setRequested(true);
     connectToPublicBinder().then((server) => {
-      dispatch(actions.compute.setActiveServerId(server.id));
+      dispatch(connect.actions.setActiveServerId(server.id));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [notebookId, requested, connect]);
+  }, [notebookId, requested, start]);
 
   return { requested, serverInfo };
 }
 
-export function useLocalJupyter(connect: boolean, notebookId?: string) {
+export function useLocalJupyter(start: boolean, notebookId?: string) {
   const [requested, setRequested] = useState(false);
   const dispatch = useDispatch();
 
-  const activeServerId = useSelector(selectors.compute.getActiveServerId);
+  const activeServerId = useSelector(selectors.getActiveServerId);
 
   const serverInfo = useSelector((state: State) => {
     if (!activeServerId) return;
@@ -51,39 +51,40 @@ export function useLocalJupyter(connect: boolean, notebookId?: string) {
   });
 
   useEffect(() => {
-    if (!notebookId || requested || !connect) return;
+    if (!notebookId || requested || !start) return;
     setRequested(true);
     connectToLocalServer().then((server) => {
-      dispatch(actions.compute.setActiveServerId(server.id));
+      dispatch(connect.actions.setActiveServerId(server.id));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [notebookId, requested, connect]);
+  }, [notebookId, requested, start]);
 
   return { requested, serverInfo };
 }
 
 export function useJupyterKernel(
-  connect: boolean,
+  start: boolean,
   notebookId?: string,
   activeServerId?: string,
   kernelName = "python3"
 ) {
   const dispatch = useDispatch();
 
-  const activeKernelId = useSelector(selectors.compute.getActiveKernelId);
-  const isLive = useSelector(selectors.ui.getIsLive);
+  const activeKernelId = useSelector(selectors.getActiveKernelId);
+  const isLive = useSelector(selectors.getIsLive);
+  // TODO selector - get active selector
   const kernelInfo = useSelector((state: State) => {
     if (!activeKernelId) return;
     return state.thebe.kernels[activeKernelId] ?? {};
   });
 
   useEffect(() => {
-    if (!activeServerId || !connect) return;
+    if (!activeServerId || !start) return;
     connectToKernel(activeServerId, kernelName).then((kernel) => {
-      dispatch(actions.compute.setActiveKernelId(kernel.id));
+      dispatch(connect.actions.setActiveKernelId(kernel.id));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeServerId, connect]);
+  }, [activeServerId, start]);
 
   useEffect(() => {
     if (
@@ -95,7 +96,7 @@ export function useJupyterKernel(
       return;
     const ctx = getContext();
     ctx.notebooks[notebookId]?.executeAll(activeKernelId);
-    dispatch(actions.ui.setIsLive(true));
+    dispatch(connect.actions.setIsLive(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notebookId, activeKernelId, kernelInfo?.status]);
 
