@@ -1,7 +1,7 @@
 import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
 import Notebook from "thebe-core/dist/notebook";
 import { State } from "../../store/index";
-import { notebookData } from "../../store/notebookData";
+import { notebookData } from "../../notebookData";
 
 export interface CodeBlock {
   id: string;

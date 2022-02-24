@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Notebook from "thebe-core/dist/notebook";
-import { RDisplay, RScope } from "./components";
-import RDynamic from "./components/RDynamic";
-import RVar from "./components/RVar";
+import { RDisplay, RScope, RDynamic, RVar } from "./connect/react/components";
 import Output from "./connect/react/Output";
 import { AppDispatch } from "./store";
 import { fetchNotebook, selectors, connect } from "./connect/redux";
@@ -125,7 +123,7 @@ function MyArticle() {
         <Output
           notebookId={notebookId}
           cellId="curvenote-cell-id-4"
-          placeholder={<img src="figure1.png" alt="composite signal" />}
+          placeholder={<img src="/figure1.png" alt="composite signal" />}
         />
         <p>
           The figure shows the main points of Equations (2) and (3):
