@@ -26,8 +26,8 @@ export const store = configureStore({
       .concat(logger)
       .concat(runtime.triggerEvaluate)
       .concat(runtime.dangerousEvaluatation)
-      .concat(InterpolationInitializer)
-      .concat(LivePageInvoker),
+      .concat(LivePageInvoker)
+      .concat(InterpolationInitializer),
 });
 
 basicRegister(store as any);

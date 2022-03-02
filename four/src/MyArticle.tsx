@@ -45,7 +45,7 @@ function MyArticle() {
         />
         <p>
           The Capital city of the island bears the same name as the province{" "}
-          <RAction bindToClick={'{ "place": "santa_cruz" }'}>
+          <RAction bindToClick={'{ "place": "santa_cruz", "zoom": 14 }'}>
             Santa Cruz de Tenerife
           </RAction>{" "}
           and the largest center of population on the island with many shopping,
@@ -53,14 +53,14 @@ function MyArticle() {
         </p>
         <p>
           The highest point on the island is the{" "}
-          <RAction bindToClick={'{ "place": "pico_tiede" }'}>
+          <RAction bindToClick={'{ "place": "pico_tiede", "zoom": 14 }'}>
             peak of Mount Tiede
           </RAction>{" "}
           also the highest mountain in Spain. The mountain sits in a wide
           caldera itself at over 2000m altitude and a National Park, zoom out (
           <RDynamic
             bind="zoom"
-            min={6}
+            min={1}
             max={16}
             step={1}
             format=".0f"
@@ -69,8 +69,10 @@ function MyArticle() {
         </p>
         <p>
           Finally jump to the north of the island to the town of{" "}
-          <RAction bindToClick={'{ "place": "orotava" }'}>La Orotava</RAction> .
-          Previously, a capital of the north of the island, this town, perched
+          <RAction bindToClick={'{ "place": "orotava", "zoom": 14 }'}>
+            La Orotava
+          </RAction>{" "}
+          . Previously, a capital of the north of the island, this town, perched
           on a ancient graviational collapse, is full of collonial architecture,
           culture and a great stop for chocolate y churros in winter.
         </p>

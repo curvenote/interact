@@ -17,11 +17,7 @@ declare global {
 }
 
 function RAction({ bindToClick, children }: RActionProps) {
-  return (
-    <r-action {...{ ":click": bindToClick, ":hover": () => {} }}>
-      {children}
-    </r-action>
-  );
+  return <r-action {...{ ":click": bindToClick }}>{children}</r-action>;
 }
 
 export default RAction;

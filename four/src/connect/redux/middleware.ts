@@ -34,7 +34,7 @@ const interpolator = new Interpolator();
 export const InterpolationInitializer =
   (store: any) => (next: any) => (action: AnyAction) => {
     const result = next(action);
-    if (action.type === "compute/setActiveNotebookId") {
+    if (action.type === "connect/setActiveNotebookId") {
       const state = store.getState();
       interpolator.reset();
       const cells = thebeSelectors.notebooks.getCellsForNotebook(
@@ -42,18 +42,16 @@ export const InterpolationInitializer =
         action.payload
       );
       interpolator.parseCells(cells);
+      console.debug("InterpolationInitializer:mapping", interpolator.mapping);
     }
     return result;
   };
 
-/**
- * Logs all actions and states after they are dispatched.
- */
 export const LivePageInvoker =
   (store: any) => (next: any) => (action: AnyAction) => {
     const result = next(action);
     if (action.type === "COMPONENT_EVENT" && action.payload.name !== "hover") {
-      console.log("LivePageInvoker:COMPONENT_EVENT");
+      console.debug("LivePageInvoker:COMPONENT_EVENT");
       const state = store.getState();
 
       // get active notebook and execute all
@@ -71,11 +69,11 @@ export const LivePageInvoker =
         {} as ValueMap
       );
 
-      console.log("interpolating with values", values);
+      console.debug("interpolating with values", values);
 
       if (selectors.getActiveKernelId(state)) {
         if (notebookId && kernelId) {
-          console.log(`Middleware executing notebook ${notebookId}`);
+          console.debug(`Middleware executing notebook ${notebookId}`);
           debouncedExecFn(
             notebookId,
             kernelId,
