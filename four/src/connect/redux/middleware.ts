@@ -9,10 +9,10 @@ import Interpolator, { ValueMap } from "../Interpolator";
  * Logs all actions and states after they are dispatched.
  */
 export const logger = (store: any) => (next: any) => (action: AnyAction) => {
-  console.group(action.type);
-  console.info("dispatching", action);
+  console.groupCollapsed(action.type);
+  console.debug("dispatching", action);
   let result = next(action);
-  console.log("next state", store.getState());
+  console.debug("next state", store.getState());
   console.groupEnd();
   return result;
 };

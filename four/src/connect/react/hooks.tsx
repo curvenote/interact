@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getContext } from "thebe-core";
+import { getContext, actions as thebeActions } from "thebe-core";
 import { ServerInfo, KernelStatus } from "thebe-core";
 import { State } from "../../store";
 import { selectors, connect } from "../redux";
@@ -94,8 +94,17 @@ export function useJupyterKernel(
       isLive
     )
       return;
-    const ctx = getContext();
-    ctx.notebooks[notebookId]?.executeAll(activeKernelId);
+
+    getContext().notebooks[notebookId].hookup(
+      getContext().kernels[activeKernelId]
+    );
+
+    // dispatch(
+    //   thebeActions.thunks.notebooks.hookupKernel(notebookId, activeKernelId)
+    // );
+    dispatch(
+      thebeActions.thunks.notebooks.executeAll(notebookId, activeKernelId)
+    );
     dispatch(connect.actions.setIsLive(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notebookId, activeKernelId, kernelInfo?.status]);

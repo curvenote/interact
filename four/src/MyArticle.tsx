@@ -23,16 +23,13 @@ function MyArticle() {
     <RScope name="page">
       <div style={{ position: "fixed", top: 0, left: 0, visibility: "hidden" }}>
         <RVar name="place" value="" type="String"></RVar>
-        <RVar name="zoom" value={12} format=".0f"></RVar>
+        <RVar name="zoom" value={7} format=".0f"></RVar>
       </div>
       <article className="centered">
         <JustMakePageLive notebookId={notebookId} local />
         <h1>Telling a story with maps</h1>
-        <p>
-          A small example to show in test controls liked to a map. In lieu of
-          adding localtileserver layers.
-        </p>
-        <p>Btw not this kind of map 👇 </p>
+        <p>A small example to show in text controls linked to a map.</p>
+        <p>By the way, not this kind of map 👇 </p>
         {"$$f: X \\rightarrow Y (1)$$"}
         <h2>Tenerife in the Canary Islands</h2>
         <p>
@@ -43,7 +40,7 @@ function MyArticle() {
         </p>
         <Output
           notebookId={notebookId}
-          cellId="curvenote-cell-id-4"
+          cellId="cell-show-map"
           placeholder={<img src="figure1.png" alt="composite signal" />}
         />
         <p>

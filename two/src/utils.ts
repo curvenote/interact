@@ -8,6 +8,14 @@ export async function connectToPublicBinder() {
   });
 }
 
+export async function connectToCurvenoteBinder() {
+  return Server.connectToServerViaBinder({
+    binderUrl: "http://52.41.228.104:8000/services/binder/",
+    repo: "curvenote/binder-base",
+    ref: "main",
+  });
+}
+
 export async function connectToLocalServer() {
   return Server.connectToServer({
     appendToken: true,

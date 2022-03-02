@@ -101,7 +101,15 @@ class Interpolator {
             // TODO could do checking here against metadata, e.g. enforce bounds
             const value = values[name] ?? mapping[name].initial ?? undefined;
             if (value) {
-              const newAssignment = `${name}=${value} # @param`;
+              let newAssignment;
+              if (typeof value === "string") {
+                newAssignment = `${name}="${value}" # @param`;
+              } else if (typeof value === "boolean") {
+                newAssignment = `${name}=${value ? "True" : "False"} # @param`;
+              } else {
+                newAssignment = `${name}=${value} # @param`;
+              }
+
               console.debug(
                 "Interpolator:interpolateParams ",
                 `${line} => ${newAssignment}`

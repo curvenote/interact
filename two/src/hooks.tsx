@@ -4,7 +4,11 @@ import { getContext } from "thebe-core";
 import { KernelInfo, KernelStatus } from "thebe-core";
 import { ServerInfo, ServerStatus } from "thebe-core";
 import { actions, selectors, State } from "./store";
-import { connectToKernel, connectToPublicBinder } from "./utils";
+import {
+  connectToCurvenoteBinder,
+  connectToKernel,
+  connectToPublicBinder,
+} from "./utils";
 
 function usePublicBinder(
   connect: boolean,
@@ -30,7 +34,7 @@ function usePublicBinder(
   useEffect(() => {
     if (!notebookId || requested || !connect) return;
     setRequested(true);
-    connectToPublicBinder().then((server) => {
+    connectToCurvenoteBinder().then((server) => {
       dispatch(actions.compute.setActiveServerId(server.id));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
