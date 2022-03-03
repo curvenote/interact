@@ -22,7 +22,7 @@ function Output({
     const ctx = getContext();
     const notebook = ctx.notebooks[notebookId];
     const cell = notebook.getCellById(cellId);
-    cell?.attach(ref.current);
+    cell?.attachToDOM(ref.current);
   }, [notebookId, cellId]);
 
   const activeKernelId = useSelector(connectSelectors.getActiveKernelId);

@@ -95,13 +95,9 @@ export function useJupyterKernel(
     )
       return;
 
-    getContext().notebooks[notebookId].hookup(
-      getContext().kernels[activeKernelId]
+    dispatch(
+      thebeActions.thunks.notebooks.attachKernel(notebookId, activeKernelId)
     );
-
-    // dispatch(
-    //   thebeActions.thunks.notebooks.hookupKernel(notebookId, activeKernelId)
-    // );
     dispatch(
       thebeActions.thunks.notebooks.executeAll(notebookId, activeKernelId)
     );
