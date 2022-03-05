@@ -39,7 +39,7 @@ export const InterpolationInitializer =
     if (action.type === "compute/setActiveNotebookId") {
       const state = store.getState();
       interpolator.reset();
-      const cells = thebeSelectors.notebooks.getCellsForNotebook(
+      const cells = thebeSelectors.notebooks.selectCellsForNotebook(
         state,
         action.payload
       );
