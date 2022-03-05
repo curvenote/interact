@@ -18,13 +18,9 @@ export const logger = (store: any) => (next: any) => (action: AnyAction) => {
 };
 
 const INVOKER_THROTTLE = 150;
-function executeFn(
-  notebookId: string,
-  kernelId: string,
-  preprocesor: (s: string) => string
-) {
+function executeFn(notebookId: string, preprocesor: (s: string) => string) {
   const ctx = getContext();
-  ctx.notebooks[notebookId].executeAll(kernelId, preprocesor);
+  ctx.notebooks[notebookId].executeAll(preprocesor);
 }
 
 const debouncedExecFn = debounce(executeFn, INVOKER_THROTTLE);
@@ -74,11 +70,7 @@ export const LivePageInvoker =
       if (selectors.getActiveKernelId(state)) {
         if (notebookId && kernelId) {
           console.debug(`Middleware executing notebook ${notebookId}`);
-          debouncedExecFn(
-            notebookId,
-            kernelId,
-            interpolator.createPreprocessor(values)
-          );
+          debouncedExecFn(notebookId, interpolator.createPreprocessor(values));
         }
       }
     }

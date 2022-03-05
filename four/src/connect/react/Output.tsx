@@ -32,7 +32,7 @@ function Output({
     if (!activeKernelId || !notebookId) return;
     const ctx = getContext();
     const notebook = ctx.notebooks[notebookId];
-    notebook?.executeUpTo(activeKernelId, cellId);
+    notebook?.executeUpTo(cellId);
   };
 
   return (

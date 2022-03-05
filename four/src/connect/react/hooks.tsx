@@ -98,9 +98,7 @@ export function useJupyterKernel(
     dispatch(
       thebeActions.thunks.notebooks.attachKernel(notebookId, activeKernelId)
     );
-    dispatch(
-      thebeActions.thunks.notebooks.executeAll(notebookId, activeKernelId)
-    );
+    dispatch(thebeActions.thunks.notebooks.executeAll(notebookId));
     dispatch(connect.actions.setIsLive(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notebookId, activeKernelId, kernelInfo?.status]);
