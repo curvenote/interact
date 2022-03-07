@@ -99,6 +99,7 @@ class Interpolator {
             name = name.trimStart().trimEnd();
 
             // TODO could do checking here against metadata, e.g. enforce bounds
+            console.log("Interpolator", name, values[name]);
             const value = values[name] ?? mapping[name].initial ?? undefined;
             if (value) {
               let newAssignment;

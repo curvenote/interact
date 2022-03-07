@@ -8,6 +8,7 @@ import { fetchNotebook, selectors, connect } from "./connect/redux";
 import "thebe-core/dist/index.css";
 import JustMakePageLive from "./connect/react/JustMakePageLive";
 import RAction from "./connect/react/components/RAction";
+import SimpleAction from "./connect/react/components/SimpleAction";
 
 function MyArticle() {
   const dispatch = useDispatch<AppDispatch>();
@@ -53,6 +54,12 @@ function MyArticle() {
         </p>
         <p>
           The highest point on the island is the{" "}
+          <SimpleAction
+            scope="page"
+            value={'{ "place": "pico_tiede", "zoom": 14 }'}
+          >
+            Peak 2
+          </SimpleAction>
           <RAction bindToClick={'{ "place": "pico_tiede", "zoom": 14 }'}>
             peak of Mount Tiede
           </RAction>{" "}
