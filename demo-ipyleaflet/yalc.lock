@@ -1,0 +1,13 @@
+{
+  "version": "v1",
+  "packages": {
+    "thebe-core": {
+      "signature": "a54cd44adeb0f150d84b86788ba86210",
+      "file": true
+    },
+    "common": {
+      "signature": "708f815c8366673749e8845ee34810e0",
+      "file": true
+    }
+  }
+}
