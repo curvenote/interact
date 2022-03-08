@@ -7,32 +7,25 @@ export const notebookData: CodeBlock[] = [
 import matplotlib.pyplot as plt
 import math
 import numpy as np
-`,
-  },
-  {
-    id: "curvenote-cell-id-2",
-    source: `
+
 A = 1 # @param
 Tp = 0.5 # @param
 wo = 0.5 # @param
 wo = wo*2*math.pi
 N = 20 # @param
+c = [(A/(math.pi*(n+1)))*math.sin((n+1)*wo*(Tp/2)) for n in range(0,N)]
 `,
   },
-  {
-    id: "curvenote-cell-id-3",
-    source: `c = [(A/(math.pi*(n+1)))*math.sin((n+1)*wo*(Tp/2)) for n in range(0,N)]`,
-  },
-  {
-    id: "curvenote-cell-id-4",
-    source: `
-plt.figure(figsize=(16,5))
-plt.bar(range(0,len(c)), c)
-plt.grid()
-mm = 1.1*np.max(np.abs(plt.ylim()))
-plt.ylim(-mm,mm);
-`,
-  },
+  //   {
+  //     id: "curvenote-cell-id-4",
+  //     source: `
+  // plt.figure(figsize=(16,5))
+  // plt.bar(range(0,len(c)), c)
+  // plt.grid()
+  // mm = 1.1*np.max(np.abs(plt.ylim()))
+  // plt.ylim(-mm,mm);
+  // `,
+  //   },
   {
     id: "curvenote-cell-id-5",
     source: `

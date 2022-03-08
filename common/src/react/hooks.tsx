@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getContext, actions as thebeActions } from "thebe-core";
+import { actions as thebeActions } from "thebe-core";
 import { ServerInfo, KernelStatus } from "thebe-core";
 import { State } from "../redux/types";
 import { selectors, connect } from "../redux";
 import {
+  connectToCurvenoteBinder,
   connectToKernel,
   connectToLocalServer,
   connectToPublicBinder,
 } from "../utils";
 
-function usePublicBinder(
+function useBinder(
   start: boolean,
-  notebookId?: string
+  curvenote: boolean,
+  notebookId?: string,
+  repo?: string,
+  branch?: string
 ): {
   requested: boolean;
   serverInfo?: ServerInfo;
@@ -30,7 +34,11 @@ function usePublicBinder(
   useEffect(() => {
     if (!notebookId || requested || !start) return;
     setRequested(true);
-    connectToPublicBinder().then((server) => {
+
+    const p = curvenote
+      ? connectToCurvenoteBinder(repo, branch)
+      : connectToPublicBinder(repo, branch);
+    p.then((server) => {
       dispatch(connect.actions.setActiveServerId(server.id));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -106,4 +114,4 @@ export function useJupyterKernel(
   return { kernelInfo, isLive };
 }
 
-export default usePublicBinder;
+export default useBinder;

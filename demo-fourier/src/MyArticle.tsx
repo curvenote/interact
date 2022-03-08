@@ -9,7 +9,7 @@ import {
   RRange,
 } from "common/dist/react/components";
 import {
-  JustMakePageLive,
+  MakePageLive,
   Output,
   selectors,
   connect,
@@ -37,9 +37,7 @@ function MyArticle() {
         <RVar name="N" value={8} format=".2f"></RVar>
       </div>
       <article className="centered">
-        <JustMakePageLive notebookId={notebookId} />
-        {/* <KernelControl /> */}
-        {/* <MakeLive notebookId={notebookId} /> */}
+        <MakePageLive notebookId={notebookId} />
         <h1>Fourier Series</h1>
         <p>
           Fourier series are powerful function and signal representation,

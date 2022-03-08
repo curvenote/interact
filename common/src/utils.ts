@@ -1,20 +1,21 @@
 import { nanoid } from "@reduxjs/toolkit";
 import { getContext, Server, ThebeKernel } from "thebe-core";
 
-export async function connectToPublicBinder() {
-  return Server.connectToServerViaBinder({
-    // repo: "binder-examples/requirements",
-    // ref: "master",
-    repo: "stevejpurves/iempymod",
-    ref: "main",
-  });
+export async function connectToPublicBinder(
+  repo: string = "binder-examples/requirements",
+  ref: string = "master"
+) {
+  return Server.connectToServerViaBinder({ repo, ref });
 }
 
-export async function connectToCurvenoteBinder() {
+export async function connectToCurvenoteBinder(
+  repo: string = "curvenote/binder-base",
+  ref: string = "main"
+) {
   return Server.connectToServerViaBinder({
     binderUrl: "http://52.41.228.104:8000/services/binder/",
-    repo: "curvenote/binder-base",
-    ref: "main",
+    repo,
+    ref,
   });
 }
 

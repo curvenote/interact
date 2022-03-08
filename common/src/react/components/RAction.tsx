@@ -17,6 +17,5 @@ declare global {
 }
 
 export function RAction({ bindToClick, children }: RActionProps) {
-  console.log("bind", bindToClick);
   return <r-action {...{ ":click": bindToClick }}>{children}</r-action>;
 }

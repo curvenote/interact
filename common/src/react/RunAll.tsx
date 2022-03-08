@@ -1,14 +1,14 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import Notebook from "thebe-core/dist/notebook";
-import { selectors } from "./store";
+import { selectors } from "../redux";
 
 const RunAll = ({ notebook }: { notebook?: Notebook }) => {
-  const activeKernelId = useSelector(selectors.compute.getActiveKernelId);
+  const activeKernelId = useSelector(selectors.getActiveKernelId);
 
   const clickRunAll = () => {
     if (!activeKernelId || !notebook) return;
-    notebook?.executeAll(activeKernelId);
+    notebook?.executeAll();
   };
 
   return (

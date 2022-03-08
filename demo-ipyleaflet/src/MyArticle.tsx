@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Notebook from "thebe-core/dist/notebook";
 import {
   Output,
-  JustMakePageLive,
+  MakePageLive,
   fetchNotebook,
   selectors,
   connect,
@@ -30,7 +30,11 @@ function MyArticle() {
         <RVar name="zoom" value={7} format=".0f"></RVar>
       </div>
       <article className="centered">
-        <JustMakePageLive notebookId={notebookId} local />
+        <MakePageLive
+          notebookId={notebookId}
+          repo="stevejpurves/base"
+          branch="main"
+        />
         <h1>Telling a story with maps</h1>
         <p>A small example to show in text controls linked to a map.</p>
         <p>By the way, not this kind of map 👇 </p>

@@ -1,0 +1,1 @@
+sed -i '' 's/"homepage": "demo-ipyleaflet\/",/"homepage": "\/",/g' package.json

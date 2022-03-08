@@ -3,21 +3,27 @@ import { KernelStatus } from "thebe-core/dist/store/kernels";
 import { ServerStatus } from "thebe-core/dist/store/servers";
 import { FiPower } from "react-icons/fi";
 import classNames from "classnames";
-import usePublicBinder, { useJupyterKernel, useLocalJupyter } from "./hooks";
+import useBinder, { useJupyterKernel, useLocalJupyter } from "./hooks";
 
-function JustMakePageLive({
+function MakePageLive({
   notebookId,
+  curvenote = false,
   local = false,
+  repo,
+  branch,
 }: {
   notebookId?: string;
+  curvenote?: boolean;
   local?: boolean;
+  repo?: string;
+  branch?: string;
 }) {
   const [connect, setConnect] = useState(false);
 
   const kernelName = "python3";
 
   const { requested: binderRequested, serverInfo: binderServerInfo } =
-    usePublicBinder(connect && !local, notebookId);
+    useBinder(connect && !local, curvenote, notebookId, repo, branch);
   const { requested: localRequested, serverInfo: localServerInfo } =
     useLocalJupyter(connect && local, notebookId);
 
@@ -61,4 +67,4 @@ function JustMakePageLive({
   );
 }
 
-export default JustMakePageLive;
+export default MakePageLive;

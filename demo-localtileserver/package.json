@@ -33,12 +33,11 @@
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
-    "deploy": "./patch_package.sh; GENERATE_SOURCEMAP=false react-scripts build; ./revert_package.sh; cp -R ./build/* ../../demo-ipyleaflet",
     "test": "GENERATE_SOURCEMAP=false react-scripts test",
     "test:watch": "GENERATE_SOURCEMAP=false yarn test --watch",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "./deploy.sh"
   },
-  "homepage": "demo-ipyleaflet/",
   "eslintConfig": {
     "extends": [
       "react-app",
