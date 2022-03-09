@@ -53,7 +53,11 @@ function MyArticle() {
         <RVar name="E0" value={1} format=".1f"></RVar>
       </div>
       <article className="centered">
-        <MakePageLive notebookId={notebookId} local />
+        <MakePageLive
+          notebookId={notebookId}
+          repo="curvenote/demo-geosci-efield"
+          branch="main"
+        />
         <h1>Conducting sphere in a uniform electric field</h1>
         <p>
           A sphere in a whole-space provides a simple geometry to examine a
