@@ -1,1 +1,1 @@
-sed -i '' 's/"homepage": "demo-fourier\/",/"homepage": "\/",/g' package.json
+sed -i '' 's/"homepage": "demo-geosci-efield\/",/"homepage": "\/",/g' package.json
