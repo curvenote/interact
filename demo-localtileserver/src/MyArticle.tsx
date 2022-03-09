@@ -27,8 +27,6 @@ function MyArticle() {
     });
   }, []);
 
-  console.log("REACT", RAction, RScope, RVar, RSelect, RDynamic);
-
   return (
     <RScope name="page">
       <div style={{ position: "fixed", top: 0, left: 0, visibility: "hidden" }}>

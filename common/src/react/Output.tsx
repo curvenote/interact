@@ -18,7 +18,6 @@ function Output({
 
   useEffect(() => {
     if (ref.current == null || !notebookId) return;
-    console.log(`Cell ${cellId} side effect`, ref);
     const ctx = getContext();
     const notebook = ctx.notebooks[notebookId];
     const cell = notebook.getCellById(cellId);

@@ -33,7 +33,7 @@
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
-    "deploy": "./patch_package.sh; GENERATE_SOURCEMAP=false react-scripts build; ./revert_package.sh; cp -R ./build/* ../../demo-ipyleaflet",
+    "deploy": "./patch_package.sh; GENERATE_SOURCEMAP=false react-scripts build; ./revert_package.sh; cp -R ./build/* ../../demo-fourier",
     "test": "GENERATE_SOURCEMAP=false react-scripts test",
     "test:watch": "GENERATE_SOURCEMAP=false yarn test --watch",
     "eject": "react-scripts eject"
