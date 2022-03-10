@@ -46,7 +46,10 @@ export const InterpolationInitializer =
 export const LivePageInvoker =
   (store: any) => (next: any) => (action: AnyAction) => {
     const result = next(action);
-    if (action.type === "COMPONENT_EVENT" && action.payload.name !== "hover") {
+    if (
+      (action.type === "COMPONENT_EVENT" && action.payload.name !== "hover") ||
+      action.type === "connect/setIsLive"
+    ) {
       console.debug("LivePageInvoker:COMPONENT_EVENT");
       const state = store.getState();
 

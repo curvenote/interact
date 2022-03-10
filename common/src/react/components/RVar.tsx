@@ -2,7 +2,13 @@ import { createElement as e } from "react";
 
 export interface RVarProps {
   name: string;
-  value: number | string | boolean | Record<string, string>;
+  value:
+    | number
+    | string
+    | boolean
+    | Record<string, string>
+    | string[]
+    | number[];
   format?: string;
   type?: string;
 }

@@ -5,6 +5,7 @@ import { RScope } from "./RScope";
 import { RVar } from "./RVar";
 import { RRange } from "./RRange";
 import { RSelect } from "./RSelect";
+import { RCheckbox } from "./RCheckbox";
 
 export const components = {
   RAction,
@@ -14,6 +15,7 @@ export const components = {
   RVar,
   RRange,
   RSelect,
+  RCheckbox,
 };
 
 export * from "./RDisplay";
@@ -23,3 +25,4 @@ export * from "./RVar";
 export * from "./RAction";
 export * from "./RRange";
 export * from "./RSelect";
+export * from "./RCheckbox";

@@ -6,10 +6,20 @@ export const notebookData: CodeBlock[] = [
   {
     id: "cell-imports",
     source: `import os
+import urllib
 try:
-    os.environ['LOCALTILESERVER_CLIENT_PREFIX'] = f"{os.environ['JUPYTERHUB_SERVICE_PREFIX']}/proxy/{{port}}"
+    os.environ['LOCALTILESERVER_CLIENT_PREFIX'] = f"{os.environ['JUPYTERHUB_SERVICE_PREFIX'][15:]}proxy/{{port}}"
+    base_url = "{0.scheme}://{0.netloc}".format(urllib.parse.urlsplit(os.environ['BINDER_LAUNCH_HOST']))
+    os.environ['LOCALTILESERVER_CLIENT_HOST'] = base_url
+    print("PREFIX1", os.environ['JUPYTERHUB_SERVICE_PREFIX'][15:])
+    print("PREFIX", os.environ['LOCALTILESERVER_CLIENT_PREFIX'])
+    print("HOST", os.environ['LOCALTILESERVER_CLIENT_HOST'])
 except:
-    pass
+    print("PREFIX", os.environ['JUPYTERHUB_SERVICE_PREFIX'])
+    print("HOST", os.environ['JUPYTERHUB_SERVICE_HOST'])
+    print("PREFIX", os.environ['LOCALTILESERVER_CLIENT_PREFIX'])
+    print("HOST", os.environ['LOCALTILESERVER_CLIENT_HOST'])
+
 from localtileserver import examples, get_leaflet_tile_layer, TileClient, examples
 from ipyleaflet import Map, LayersControl
 from ipywidgets import Layout

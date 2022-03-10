@@ -1,0 +1,1 @@
+sed -i '' 's/"homepage": "demo-pandas-energy\/",/"homepage": "\/",/g' package.json

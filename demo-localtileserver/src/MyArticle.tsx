@@ -45,6 +45,7 @@ function MyArticle() {
           Overlaying Global Raster Datasets with the{" "}
           <code>localtileserver</code>
         </h1>
+        <Output notebookId={notebookId} cellId="cell-imports" />
         <p>
           This is an example of an explorable article using ipyleaflet with a
           localtileserver to produce maps with a raster based data overlay. We
@@ -93,7 +94,7 @@ function MyArticle() {
           . We can chose to display either of these (currently we are looking at{" "}
           <RSelect
             bindToValue="layer"
-            bindToChange={"{layer: value}"}
+            // bindToChange={"{layer: value}"}
             values={["methane", "elevation"]}
             labels={["Annual Average Methane", "Global Elevation"]}
           ></RSelect>
