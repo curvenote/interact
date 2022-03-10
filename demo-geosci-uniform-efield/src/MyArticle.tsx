@@ -2,18 +2,16 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Notebook from "thebe-core/dist/notebook";
 import {
-  RVar,
-  RScope,
-  RDisplay,
-  RDynamic,
-  RRange,
-} from "common/dist/react/components";
-import {
   MakePageLive,
   Output,
   selectors,
   connect,
   fetchNotebook,
+  RVar,
+  RScope,
+  RDisplay,
+  RDynamic,
+  RRange,
 } from "common";
 import { notebookData } from "./notebookData";
 import { AppDispatch } from "./store";

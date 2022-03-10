@@ -20,9 +20,6 @@ export const store = configureStore({
       .concat(runtime.dangerousEvaluatation)
       .concat(runtime.triggerEvaluate)
       .concat(logger),
-  // LivePageInvoker,
-  // runtime.dangerousEvaluatation,
-  // runtime.triggerEvaluate,
 });
 
 basicRegister(store as any);

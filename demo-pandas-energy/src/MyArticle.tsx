@@ -102,11 +102,8 @@ function MyArticle() {
         <RVar name="normalize" value={false} type="Boolean"></RVar>
       </div>
       <article className="centered wide">
-        <MakePageLive notebookId={notebookId} local />
+        <MakePageLive notebookId={notebookId} />
         <h1>World Energy and Economic data</h1>
-        {/* <Output notebookId={notebookId} cellId="pandas-imports-load-data" />
-        <Output notebookId={notebookId} cellId="pandas-params" />
-        <Output notebookId={notebookId} cellId="pandas-stats" /> */}
         <p>
           This article allows us to explore details of the part of the{" "}
           <a href="https://ourworldindata.org/energy">World Energy Dataset</a>{" "}

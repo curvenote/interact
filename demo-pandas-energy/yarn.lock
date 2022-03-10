@@ -1183,8 +1183,10 @@
     redux-thunk "^2.3.0"
     uuid "^8.3.2"
 
-"@curvenote/runtime@file:.yalc/@curvenote/runtime":
-  version "0.2.8"
+"@curvenote/runtime@^0.2.9":
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/@curvenote/runtime/-/runtime-0.2.9.tgz#73e1c847924c0cf6d1b0ea635a2388469abd53e5"
+  integrity sha512-e9lO+m+khJS49FfZZrGQDGRj8qPeS12xceEcHmFv5dgW+buinSXrGFKJhUloxiyuZmZH0xr4oYzuCXSmCWpThw==
   dependencies:
     lodash.isequal "^4.5.0"
     redux "^4.1.0"
