@@ -8,7 +8,7 @@ import {
   selectors,
   connect,
   Output,
-  JustMakePageLive,
+  MakePageLive,
 } from "common";
 import "thebe-core/dist/index.css";
 import { notebookData } from "./notebookData";
@@ -30,7 +30,7 @@ function MyArticle() {
         <RVar name="offset" value={100} format=".0f"></RVar>
       </div>
       <article className="centered">
-        <JustMakePageLive notebookId={notebookId} />
+        <MakePageLive notebookId={notebookId} />
         <h1>Difference between magnetic dipole and loop sources</h1>
         <p>
           In this example we look at the differences between an electric loop

@@ -33,10 +33,10 @@
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "deploy": "./patch_package.sh; GENERATE_SOURCEMAP=false react-scripts build; ./revert_package.sh; cp -R ./build/* ../../iempymod",
     "test": "GENERATE_SOURCEMAP=false react-scripts test",
     "test:watch": "GENERATE_SOURCEMAP=false yarn test --watch",
-    "eject": "react-scripts eject",
-    "deploy": "./deploy.sh"
+    "eject": "react-scripts eject"
   },
   "homepage": "/",
   "eslintConfig": {
