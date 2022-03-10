@@ -6,8 +6,13 @@
       "file": true
     },
     "common": {
-      "signature": "14e38c432e4bd3b9f31356954491dd59",
+      "signature": "a328bd5b6b4708c45e47d2b1798caeef",
       "file": true
+    },
+    "@curvenote/runtime": {
+      "signature": "57d0d62adfe52eb29a309a944e3d5aa5",
+      "file": true,
+      "replaced": "^0.2.8"
     }
   }
 }

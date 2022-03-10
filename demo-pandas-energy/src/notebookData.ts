@@ -10,7 +10,7 @@ import itertools
 import warnings
 warnings.filterwarnings('ignore')
 
-df = pd.read_csv('https://raw.githubusercontent.com/owid/energy-data/master/owid-energy-data.csv');
+df = pd.read_csv('https://public-demodata.s3.us-west-2.amazonaws.com/owid/owid-energy-data.csv');
 df['fossil_consumption'] = df['fossil_fuel_consumption']
 df['biofuel_energy_per_capita'] = df['biofuel_cons_per_capita']
 
@@ -39,17 +39,15 @@ df2.describe()[1:].style.format({'gdp': '\${0:,.0f}'})
   },
   {
     id: "pandas-plot-gdp",
-    source: `print(country_list)
-df_sel = df2[df2['country'].isin(country_list)]
+    source: `df_sel = df2[df2['country'].isin(country_list)]
 with plt.style.context('seaborn-darkgrid'):
     fig, ax = plt.subplots(1,2, figsize=(20,8), gridspec_kw={'width_ratios': [2, 1]})
     df_gdp = df_sel[['country', 'year','gdp']]
     df_gdp['gdp'] = df_gdp['gdp'] / 1e9;
     df_gdp_c = df_gdp.groupby('country')
 
-    df_gdp_c.plot(kind="line", x='year', ax=ax[0]);
+    df_gdp_c.plot(kind="line", x='year', ax=ax[0], legend=False);
 
-    ax[0].legend(df_gdp_c.groups.keys())
     ax[1].set_title('Country GDP Since 1990 ($ Billion)')
     ax[0].set_xlabel('Year')
     ax[0].set_ylabel('GDP $ Billion')
@@ -86,6 +84,7 @@ with plt.style.context('seaborn-darkgrid'):
   },
   {
     id: "pandas-table-stats",
-    source: `df_p`,
+    source: `df_p.columns = df_p.columns.str.replace("_", " ")
+df_p.style.set_table_styles([dict(selector="th",props=[('max-width', '50px'), ('text-align','center')])])`,
   },
 ];

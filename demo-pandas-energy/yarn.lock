@@ -1183,6 +1183,14 @@
     redux-thunk "^2.3.0"
     uuid "^8.3.2"
 
+"@curvenote/runtime@file:.yalc/@curvenote/runtime":
+  version "0.2.8"
+  dependencies:
+    lodash.isequal "^4.5.0"
+    redux "^4.1.0"
+    redux-thunk "^2.3.0"
+    uuid "^8.3.2"
+
 "@curvenote/svg@^0.0.9":
   version "0.0.9"
   resolved "https://registry.yarnpkg.com/@curvenote/svg/-/svg-0.0.9.tgz#a98e2da6371bef4feb9480fa2a425f693335cece"

@@ -17,7 +17,7 @@ export function RCheckbox({
 }: RCheckboxProps) {
   return e("r-checkbox", {
     bind,
-    ["change"]: bindToChange,
+    [":change"]: bindToChange,
     label,
     [":label"]: bindToLabel,
     value,

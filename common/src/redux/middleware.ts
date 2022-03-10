@@ -9,11 +9,10 @@ import Interpolator, { ValueMap } from "../Interpolator";
  * Logs all actions and states after they are dispatched.
  */
 export const logger = (store: any) => (next: any) => (action: AnyAction) => {
-  console.groupCollapsed(action.type);
+  console.info(action.type);
   console.debug("dispatching", action);
   let result = next(action);
   console.debug("next state", store.getState());
-  console.groupEnd();
   return result;
 };
 
@@ -27,32 +26,34 @@ const debouncedExecFn = debounce(executeFn, INVOKER_THROTTLE);
 
 const interpolator = new Interpolator();
 
-export const InterpolationInitializer =
-  (store: any) => (next: any) => (action: AnyAction) => {
-    const result = next(action);
-    if (action.type === "connect/setActiveNotebookId") {
-      const state = store.getState();
-      interpolator.reset();
-      const cells = thebeSelectors.notebooks.selectCellsForNotebook(
-        state,
-        action.payload
-      );
-      interpolator.parseCells(cells);
-      console.debug("InterpolationInitializer:mapping", interpolator.mapping);
-    }
-    return result;
-  };
+// export const InterpolationInitializer =
+//   (store: any) => (next: any) => (action: AnyAction) => {
+//     const result = next(action);
+//     if (action.type === "connect/setActiveNotebookId") {
+//       const state = store.getState();
+//       interpolator.reset();
+//       const cells = thebeSelectors.notebooks.selectCellsForNotebook(
+//         state,
+//         action.payload
+//       );
+//       interpolator.parseCells(cells);
+//       console.debug("InterpolationInitializer:mapping", interpolator.mapping);
+//     }
+//     return result;
+//   };
 
 export const LivePageInvoker =
   (store: any) => (next: any) => (action: AnyAction) => {
+    // immediately call next as we want to operate on the final state
     const result = next(action);
     if (
       (action.type === "COMPONENT_EVENT" && action.payload.name !== "hover") ||
       action.type === "connect/setIsLive"
     ) {
-      console.debug("LivePageInvoker:COMPONENT_EVENT");
+      console.debug(`LivePageInvoker:${action.type}`);
       const state = store.getState();
 
+      console.log("********", result);
       // get active notebook and execute all
       const notebookId = selectors.getActiveNotebookId(state);
       const kernelId = selectors.getActiveKernelId(state);

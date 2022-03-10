@@ -17,6 +17,7 @@
   cursor: pointer;
   border-radius: 50%;
   font-size: 120%;
+  z-index: 100;
 }
 
 .just-make-live-requested {

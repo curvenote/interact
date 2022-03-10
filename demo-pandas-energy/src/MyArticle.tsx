@@ -104,6 +104,9 @@ function MyArticle() {
       <article className="centered wide">
         <MakePageLive notebookId={notebookId} local />
         <h1>World Energy and Economic data</h1>
+        {/* <Output notebookId={notebookId} cellId="pandas-imports-load-data" />
+        <Output notebookId={notebookId} cellId="pandas-params" />
+        <Output notebookId={notebookId} cellId="pandas-stats" /> */}
         <p>
           This article allows us to explore details of the part of the{" "}
           <a href="https://ourworldindata.org/energy">World Energy Dataset</a>{" "}
@@ -193,14 +196,14 @@ function MyArticle() {
           <RDynamic
             bind="selected_year"
             min={1990}
-            max={2020}
+            max={2019}
             step={1}
             format=".0f"
           ></RDynamic>
           , the statistic{" "}
           <RSelect
             bindToValue="selected_stat"
-            bindToChange={"{layer: value}"}
+            bindToChange={"{selected_stat: value}"}
             values={["consumption", "electricity", "share_energy"]}
             labels={[
               "Total Consumption",
