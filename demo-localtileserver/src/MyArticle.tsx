@@ -36,11 +36,7 @@ function MyArticle() {
         <RVar name="colormap" value="plasma" type="String"></RVar>
       </div>
       <article className="centered">
-        <MakePageLive
-          notebookId={notebookId}
-          repo="stevejpurves/earth-geo-data"
-          branch="main"
-        />
+        <MakePageLive notebookId={notebookId} curvenote />
         <h1>
           Overlaying Global Raster Datasets with the{" "}
           <code>localtileserver</code>

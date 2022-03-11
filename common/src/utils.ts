@@ -13,7 +13,7 @@ export async function connectToCurvenoteBinder(
   ref: string = "main"
 ) {
   return Server.connectToServerViaBinder({
-    binderUrl: "http://52.41.228.104:8000/services/binder/",
+    binderUrl: "https://binder.curvenote.dev/services/binder/",
     repo,
     ref,
   });

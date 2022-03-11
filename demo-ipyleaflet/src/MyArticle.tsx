@@ -30,11 +30,7 @@ function MyArticle() {
         <RVar name="zoom" value={7} format=".0f"></RVar>
       </div>
       <article className="centered">
-        <MakePageLive
-          notebookId={notebookId}
-          repo="stevejpurves/base"
-          branch="main"
-        />
+        <MakePageLive notebookId={notebookId} curvenote />
         <h1>Telling a story with maps</h1>
         <p>A small example to show in text controls linked to a map.</p>
         <p>By the way, not this kind of map 👇 </p>

@@ -37,7 +37,7 @@ function MyArticle() {
         <RVar name="N" value={8} format=".2f"></RVar>
       </div>
       <article className="centered">
-        <MakePageLive notebookId={notebookId} />
+        <MakePageLive curvenote notebookId={notebookId} />
         <h1>Fourier Series</h1>
         <p>
           Fourier series are powerful function and signal representation,
@@ -189,14 +189,6 @@ function MyArticle() {
           cellId="curvenote-cell-id-5"
           placeholder={<img src="components.png" alt="fourier components" />}
         />
-        {/* <h2>The Coefficients</h2>
-        <Output
-          notebookId={notebookId}
-          cellId="curvenote-cell-id-4"
-          placeholder={
-            <img src="coefficients.png" alt="fourier series coefficients" />
-          }
-        /> */}
       </article>
     </RScope>
   );

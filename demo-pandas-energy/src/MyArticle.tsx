@@ -102,7 +102,7 @@ function MyArticle() {
         <RVar name="normalize" value={false} type="Boolean"></RVar>
       </div>
       <article className="centered wide">
-        <MakePageLive notebookId={notebookId} />
+        <MakePageLive notebookId={notebookId} curvenote />
         <h1>World Energy and Economic data</h1>
         <p>
           This article allows us to explore details of the part of the{" "}
