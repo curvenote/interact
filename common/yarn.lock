@@ -1867,18 +1867,6 @@ combined-stream@^1.0.8:
   dependencies:
     delayed-stream "~1.0.0"
 
-"common@file:.yalc/common":
-  version "0.0.1"
-  dependencies:
-    "@curvenote/runtime" "^0.2.8"
-    "@reduxjs/toolkit" "^1.8.0"
-    classnames "^2.3.1"
-    json5 "^2.2.0"
-    react "^17.0.2"
-    react-dom "^17.0.2"
-    react-icons "^4.3.1"
-    react-redux "^7.2.6"
-
 compute-gcd@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/compute-gcd/-/compute-gcd-1.2.1.tgz#34d639f3825625e1357ce81f0e456a6249d8c77f"
