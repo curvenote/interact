@@ -4,9 +4,7 @@ import Notebook from "thebe-core/dist/notebook";
 import {
   RVar,
   RScope,
-  RDisplay,
   RDynamic,
-  RRange,
   RCheckbox,
   RSelect,
 } from "common/dist/react/components";
@@ -22,7 +20,6 @@ import { AppDispatch } from "./store";
 
 const COUNTRIES = [
   "Iraq",
-  "Western Africa",
   "Western Sahara",
   "Vietnam",
   "Colombia",
@@ -37,7 +34,6 @@ const COUNTRIES = [
   "Netherlands",
   "Thailand",
   "Taiwan",
-  "North America",
   "Niue",
   "Nigeria",
   "Poland",
@@ -47,12 +43,9 @@ const COUNTRIES = [
   "Iran",
   "Spain",
   "Saudi Arabia",
-  "Canada",
   "Turkey",
   "South Sudan",
   "South Korea",
-  "Middle Africa",
-  "Middle East",
   "Mexico",
   "Italy",
   "United Kingdom",
@@ -68,8 +61,13 @@ const COUNTRIES = [
   "Japan",
   "India",
   "China",
+  "Canada",
   "United States",
-  "United States Virgin Islands",
+  "Middle East",
+  "Middle Africa",
+  "South America",
+  "North America",
+  "Western Africa",
   "World",
 ];
 
@@ -83,20 +81,20 @@ function MyArticle() {
     });
   }, []);
 
-  const countries: string[] = [];
+  const initialCountryList: string[] = [];
   if (COUNTRIES.length < 10) throw Error("Need more countries to chose from");
-  while (countries.length < 8) {
+  while (initialCountryList.length < 7) {
     const c = COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)];
-    if (countries.indexOf(c) === -1) {
+    if (initialCountryList.indexOf(c) === -1) {
       console.log(c);
-      countries.push(c);
+      initialCountryList.push(c);
     }
   }
 
   return (
     <RScope name="page">
       <div style={{ position: "fixed", top: 0, left: 0, visibility: "hidden" }}>
-        <RVar name="countries" value={countries} type="Array"></RVar>
+        <RVar name="countries" value={initialCountryList} type="Array"></RVar>
         <RVar name="selected_stat" value="consumption" type="String"></RVar>
         <RVar name="selected_year" value={2019} format=".0f"></RVar>
         <RVar name="normalize" value={false} type="Boolean"></RVar>
@@ -156,7 +154,7 @@ function MyArticle() {
             >
               <RCheckbox
                 label={c}
-                value={countries.indexOf(c) !== -1}
+                value={initialCountryList.indexOf(c) !== -1}
                 bindToChange={`{countries: countries.indexOf("${c}") === -1 ? countries.concat(",${c}") : countries.replace("${c},","").replace(",${c}","")}`}
               ></RCheckbox>
             </div>
