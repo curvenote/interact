@@ -1,0 +1,22 @@
+{
+  "name": "interact",
+  "version": "1.0.0",
+  "description": "A set of standalone experiments on interactive computation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/curvenote/interact.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/curvenote/interact/issues"
+  },
+  "homepage": "https://github.com/curvenote/interact#readme",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
