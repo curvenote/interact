@@ -1,6 +1,6 @@
-import {ThebeServer} from 'thebe-core';
+import {ThebeServer, ThebeSession} from 'thebe-core';
 
-export type ContextObject = ThebeServer;
+export type ContextObject = ThebeServer | ThebeSession;
 
 interface ContextItem {
     id: string;
@@ -31,9 +31,14 @@ export function setupContext() {
 }
 
 export function getContext() {
+    if (!context) throw Error('Context is not initialized, call setupContext')
     return context;
 }
 
 export function addObjectToContext(obj: ContextObject) {
-    context?.set(obj.id, obj)
+    context?.set(obj.id, obj);
+}
+
+export function getObjectFromContext<T>(id: string) {
+    return context?.get(id)?.obj as T | undefined;
 }

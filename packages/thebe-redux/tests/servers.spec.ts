@@ -3,6 +3,8 @@ import {selectors} from '../src'
 import servers from '../src/servers'
 import {ServerStatus} from 'thebe-core'
 
+jest.mock('thebe-core')
+
 describe('servers', () => {
     test('initial servers state is empty', () => {
         const store = setupStore();
@@ -14,7 +16,7 @@ describe('servers', () => {
     })
     test('add a server', () => {
         const store = setupStore();
-        store?.dispatch(servers.actions.add({ id: "abc123", status: ServerStatus.launching }))
+        store?.dispatch(servers.actions.upsert({ id: "abc123", status: ServerStatus.launching }))
         expect(selectors.selectServer(store.getState(), "abc123")).toEqual({
             id: 'abc123',
             status: ServerStatus.launching

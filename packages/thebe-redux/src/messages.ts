@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { MessageCallbackArgs, ServerStatus } from 'thebe-core';
 
-export type ServerState = MessageCallbackArgs[];
+export type MessagesState = MessageCallbackArgs[];
 
-const servers = createSlice({
-  name: "servers",
-  initialState: {} as ServerState,
+const messages = createSlice({
+  name: "messages",
+  initialState: {} as MessagesState,
   reducers: {
-    add: (state: ServerState, action: PayloadAction<MessageCallbackArgs>) => {
+    add: (state: MessagesState, action: PayloadAction<MessageCallbackArgs>) => {
+      // TODO: limit length
       return [
             action.payload,
             ...state,
@@ -19,4 +20,4 @@ const servers = createSlice({
   },
 });
 
-export default servers;
+export default messages;
