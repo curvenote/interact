@@ -1,5 +1,5 @@
-import { CombinedState } from "@reduxjs/toolkit";
-import { State as ThebeState } from "thebe-core";
+import type { CombinedState } from '@reduxjs/toolkit';
+import type { State as ThebeState } from 'thebe-redux';
 
 export interface ConnectState {
   activeServerId?: string;

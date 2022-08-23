@@ -1,9 +1,10 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 export enum ErrorFrom {
-  "cell" = "cell",
-  "kernel" = "kernel",
-  "server" = "server",
+  'cell' = 'cell',
+  'kernel' = 'kernel',
+  'server' = 'server',
 }
 
 export interface ErrorItem {
@@ -20,7 +21,7 @@ export type ErrorsState = {
 function reduceFrom(
   from: ErrorFrom,
   state: ErrorsState,
-  action: PayloadAction<{ id: string; message: string }>
+  action: PayloadAction<{ id: string; message: string }>,
 ) {
   const { id, message } = action.payload;
   return {
@@ -30,23 +31,17 @@ function reduceFrom(
 }
 
 const errors = createSlice({
-  name: "errors",
+  name: 'errors',
   initialState: {
     log: [],
   } as ErrorsState,
   reducers: {
-    cell: (
-      state: ErrorsState,
-      action: PayloadAction<{ id: string; message: string }>
-    ) => reduceFrom(ErrorFrom.cell, state, action),
-    kernel: (
-      state: ErrorsState,
-      action: PayloadAction<{ id: string; message: string }>
-    ) => reduceFrom(ErrorFrom.kernel, state, action),
-    server: (
-      state: ErrorsState,
-      action: PayloadAction<{ id: string; message: string }>
-    ) => reduceFrom(ErrorFrom.server, state, action),
+    cell: (state: ErrorsState, action: PayloadAction<{ id: string; message: string }>) =>
+      reduceFrom(ErrorFrom.cell, state, action),
+    kernel: (state: ErrorsState, action: PayloadAction<{ id: string; message: string }>) =>
+      reduceFrom(ErrorFrom.kernel, state, action),
+    server: (state: ErrorsState, action: PayloadAction<{ id: string; message: string }>) =>
+      reduceFrom(ErrorFrom.server, state, action),
   },
 });
 

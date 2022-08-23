@@ -1,18 +1,16 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { MessageCallbackArgs, ServerStatus } from 'thebe-core';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import type { MessageCallbackArgs } from 'thebe-core';
 
 export type MessagesState = MessageCallbackArgs[];
 
 const messages = createSlice({
-  name: "messages",
+  name: 'messages',
   initialState: {} as MessagesState,
   reducers: {
     add: (state: MessagesState, action: PayloadAction<MessageCallbackArgs>) => {
       // TODO: limit length
-      return [
-            action.payload,
-            ...state,
-        ];
+      return [action.payload, ...state];
     },
     clear: () => {
       return [];

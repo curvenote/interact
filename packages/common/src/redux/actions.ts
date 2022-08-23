@@ -1,6 +1,8 @@
-import { AnyAction, ThunkAction } from "@reduxjs/toolkit";
-import Notebook from "thebe-core/dist/notebook";
-import { State } from "./types";
+import type { AnyAction, ThunkAction } from '@reduxjs/toolkit';
+// TODO export
+// import type { CodeBlock } from 'thebe-core';
+import { ThebeNotebook } from 'thebe-core';
+import type { State } from './types';
 
 export interface CodeBlock {
   id: string;
@@ -8,11 +10,9 @@ export interface CodeBlock {
 }
 
 export const fetchNotebook =
-  (
-    mockData?: CodeBlock[]
-  ): ThunkAction<Promise<Notebook>, State, unknown, AnyAction> =>
-  async (): Promise<Notebook> => {
+  (mockData?: CodeBlock[]): ThunkAction<Promise<ThebeNotebook>, State, unknown, AnyAction> =>
+  async (): Promise<ThebeNotebook> => {
     // TODO query api to get notebookData
     // load data into thebe
-    return Notebook.fromCodeBlocks(mockData ?? []); // TODO will be a thunk
+    return ThebeNotebook.fromCodeBlocks(mockData ?? [], {});
   };

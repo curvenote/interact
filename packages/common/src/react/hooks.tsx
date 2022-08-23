@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { actions as thebeActions } from "thebe-core";
-import { ServerInfo, KernelStatus } from "thebe-core";
-import { State } from "../redux/types";
-import { selectors, connect } from "../redux";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import type { ServerInfo } from 'thebe-redux';
+import type { State } from '../redux/types';
+import { selectors, connect } from '../redux';
 import {
   connectToCurvenoteBinder,
   connectToKernel,
   connectToLocalServer,
   connectToPublicBinder,
-} from "../utils";
+} from '../utils';
 
 function useBinder(
   start: boolean,
   curvenote: boolean,
   notebookId?: string,
   repo?: string,
-  branch?: string
+  branch?: string,
 ): {
   requested: boolean;
   serverInfo?: ServerInfo;
@@ -39,7 +38,7 @@ function useBinder(
       ? connectToCurvenoteBinder(repo, branch)
       : connectToPublicBinder(repo, branch);
     p.then((server) => {
-      dispatch(connect.actions.setActiveServerId(server.id));
+      // dispatch(connect.actions.setActiveServerId(server.id));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notebookId, requested, start]);
@@ -62,7 +61,7 @@ export function useLocalJupyter(start: boolean, notebookId?: string) {
     if (!notebookId || requested || !start) return;
     setRequested(true);
     connectToLocalServer().then((server) => {
-      dispatch(connect.actions.setActiveServerId(server.id));
+      // dispatch(connect.actions.setActiveServerId(server.id));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notebookId, requested, start]);
@@ -74,7 +73,7 @@ export function useJupyterKernel(
   start: boolean,
   notebookId?: string,
   activeServerId?: string,
-  kernelName = "python3"
+  kernelName = 'python3',
 ) {
   const dispatch = useDispatch();
 
@@ -83,32 +82,26 @@ export function useJupyterKernel(
   // TODO selector - get active selector
   const kernelInfo = useSelector((state: State) => {
     if (!activeKernelId) return;
-    return state.thebe.kernels[activeKernelId] ?? {};
+    // return state.thebe.kernels[activeKernelId] ?? {};
+    return {};
   });
 
   useEffect(() => {
     if (!activeServerId || !start) return;
     connectToKernel(activeServerId, kernelName).then((kernel) => {
-      dispatch(connect.actions.setActiveKernelId(kernel.id));
+      // dispatch(connect.actions.setActiveKernelId(kernel.id));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeServerId, start]);
 
   useEffect(() => {
-    if (
-      !notebookId ||
-      !activeKernelId ||
-      kernelInfo?.status !== KernelStatus.ready ||
-      isLive
-    )
-      return;
+    // if (!notebookId || !activeKernelId || kernelInfo?.status !== KernelStatus.ready || isLive)
+    //   return;
 
-    dispatch(
-      thebeActions.thunks.notebooks.attachKernel(notebookId, activeKernelId)
-    );
+    // dispatch(thebeActions.thunks.notebooks.attachKernel(notebookId, activeKernelId));
     dispatch(connect.actions.setIsLive(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [notebookId, activeKernelId, kernelInfo?.status]);
+  }, [notebookId, activeKernelId]);
 
   return { kernelInfo, isLive };
 }

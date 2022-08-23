@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import type { ServerStatus } from 'thebe-core';
 
 export interface ServerInfo {
@@ -9,23 +10,24 @@ export interface ServerInfo {
 export type ServerState = Record<string, ServerInfo>;
 
 const servers = createSlice({
-  name: "servers",
+  name: 'servers',
   initialState: {} as ServerState,
   reducers: {
-    upsert: (state: ServerState, action: PayloadAction<{ id: string, status: ServerStatus}>) => {
+    upsert: (state: ServerState, action: PayloadAction<{ id: string; status: ServerStatus }>) => {
       const { id, status } = action.payload;
       if (id in state && state[id].status === status) return state;
       return {
         ...state,
         [id]: {
           id,
-          status
-        }
-      }
+          status,
+        },
+      };
     },
-    remove: (state, action: PayloadAction<{ id: string}>) => {
+    remove: (state, action: PayloadAction<{ id: string }>) => {
       const { id } = action.payload;
-      if (id in state) return Object.fromEntries(Object.entries(state).filter(([id,obj]) => id !== id))
+      if (id in state)
+        return Object.fromEntries(Object.entries(state).filter(([id2]) => id2 !== id));
       return state;
     },
     clear: () => {
@@ -33,7 +35,5 @@ const servers = createSlice({
     },
   },
 });
-
-
 
 export default servers;

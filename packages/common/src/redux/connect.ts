@@ -1,8 +1,9 @@
-import { CombinedState, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ConnectState, State } from "./types";
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { CombinedState, createSlice } from '@reduxjs/toolkit';
+import type { ConnectState, State } from './types';
 
 const connect = createSlice({
-  name: "connect",
+  name: 'connect',
   initialState: {
     isLive: false,
   } as ConnectState,
@@ -19,10 +20,7 @@ const connect = createSlice({
         activeKernelId: action.payload,
       };
     },
-    setActiveNotebookId: (
-      state: ConnectState,
-      action: PayloadAction<string>
-    ) => {
+    setActiveNotebookId: (state: ConnectState, action: PayloadAction<string>) => {
       return {
         ...state,
         activeNotebookId: action.payload,

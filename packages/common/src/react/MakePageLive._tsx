@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { KernelStatus } from "thebe-core/dist/store/kernels";
-import { ServerStatus } from "thebe-core/dist/store/servers";
-import { FiPower } from "react-icons/fi";
-import classNames from "classnames";
-import useBinder, { useJupyterKernel, useLocalJupyter } from "./hooks";
+import React, { useState } from 'react';
+import { KernelStatus } from 'thebe-core/dist/store/kernels';
+import { ServerStatus } from 'thebe-core/dist/store/servers';
+import { FiPower } from 'react-icons/fi';
+import classNames from 'classnames';
+import useBinder, { useJupyterKernel, useLocalJupyter } from './hooks';
 
 function MakePageLive({
   notebookId,
@@ -20,12 +20,19 @@ function MakePageLive({
 }) {
   const [connect, setConnect] = useState(false);
 
-  const kernelName = "python3";
+  const kernelName = 'python3';
 
-  const { requested: binderRequested, serverInfo: binderServerInfo } =
-    useBinder(connect && !local, curvenote, notebookId, repo, branch);
-  const { requested: localRequested, serverInfo: localServerInfo } =
-    useLocalJupyter(connect && local, notebookId);
+  const { requested: binderRequested, serverInfo: binderServerInfo } = useBinder(
+    connect && !local,
+    curvenote,
+    notebookId,
+    repo,
+    branch,
+  );
+  const { requested: localRequested, serverInfo: localServerInfo } = useLocalJupyter(
+    connect && local,
+    notebookId,
+  );
 
   const requested = binderRequested || localRequested;
   const serverInfo = binderServerInfo ?? localServerInfo;
@@ -34,7 +41,7 @@ function MakePageLive({
     serverInfo?.status === ServerStatus.ready,
     notebookId,
     serverInfo?.id,
-    kernelName
+    kernelName,
   );
 
   const clickMakeLive = () => {
@@ -42,9 +49,8 @@ function MakePageLive({
     setConnect(true);
   };
 
-  let message = "Click to connect to a server/kernel and make the page live";
-  if (serverInfo && serverInfo?.status !== ServerStatus.ready)
-    message = serverInfo?.message;
+  let message = 'Click to connect to a server/kernel and make the page live';
+  if (serverInfo && serverInfo?.status !== ServerStatus.ready) message = serverInfo?.message;
   else if (kernelInfo && kernelInfo.status !== KernelStatus.ready)
     message = `Connecting to kernel: ${kernelName}`;
   // TODO errors!
@@ -53,9 +59,9 @@ function MakePageLive({
   return (
     <div className="just-make-live">
       <button
-        className={classNames("just-make-live-button", {
-          "just-make-live-requested": requested && !isLive,
-          "just-make-live-connected": isLive,
+        className={classNames('just-make-live-button', {
+          'just-make-live-requested': requested && !isLive,
+          'just-make-live-connected': isLive,
         })}
         disabled={requested}
         onClick={clickMakeLive}

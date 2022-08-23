@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Server, selectors as thebeSelectors } from "thebe-core";
-import { KernelStatus } from "thebe-core/dist/store/kernels";
-import { ServerStatus } from "thebe-core/dist/store/servers";
-import { selectors, connect } from "../redux";
-import { State } from "../redux/types";
-import {
-  connectToKernel,
-  connectToLocalServer,
-  connectToPublicBinder,
-} from "../utils";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+// import { Server, selectors as thebeSelectors } from 'thebe-core';
+// import { KernelStatus } from 'thebe-core/dist/store/kernels';
+// import { ServerStatus } from 'thebe-core/dist/store/servers';
+import { selectors, connect } from '../redux';
+// import { State } from '../redux/types';
+import { connectToKernel, connectToLocalServer, connectToPublicBinder } from '../utils';
 
 function KernelPanel() {
   const dispatch = useDispatch();
@@ -34,11 +30,11 @@ function KernelPanel() {
   };
 
   const defaultKernelName = useSelector((state: State) =>
-    thebeSelectors.servers.getDefaultKernelName(state, activeServerId ?? "")
+    thebeSelectors.servers.getDefaultKernelName(state, activeServerId ?? ''),
   );
 
   const kernelNames = useSelector((state: State) =>
-    thebeSelectors.servers.getKernelNames(state, activeServerId ?? "")
+    thebeSelectors.servers.getKernelNames(state, activeServerId ?? ''),
   );
 
   const serverInfo = useSelector((state: State) => {
@@ -70,8 +66,7 @@ function KernelPanel() {
     );
   });
 
-  const kernelStatusColor =
-    kernelInfo?.status === KernelStatus.ready ? "green" : "orange";
+  const kernelStatusColor = kernelInfo?.status === KernelStatus.ready ? 'green' : 'orange';
 
   return (
     <div className="kernel-panel">
@@ -84,7 +79,7 @@ function KernelPanel() {
           connect to jupyter (local)
         </button>
         {serverInfo?.status && (
-          <div style={{ fontSize: "80%" }}>
+          <div style={{ fontSize: '80%' }}>
             <div>Status: {serverInfo?.status}</div>
             <div>{serverInfo?.message}</div>
           </div>
@@ -98,9 +93,7 @@ function KernelPanel() {
       )}
       {kernelInfo?.status && (
         <div>
-          <div style={{ color: kernelStatusColor }}>
-            Status: {kernelInfo?.status}
-          </div>
+          <div style={{ color: kernelStatusColor }}>Status: {kernelInfo?.status}</div>
         </div>
       )}
     </div>
@@ -112,7 +105,7 @@ function KernelControl() {
 
   return (
     <div className="kernel-control">
-      <button onClick={() => setOpen(!open)}>{">o<"}</button>
+      <button onClick={() => setOpen(!open)}>{'>o<'}</button>
       {open && <KernelPanel />}
     </div>
   );

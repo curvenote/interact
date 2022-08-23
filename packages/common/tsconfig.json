@@ -20,5 +20,5 @@
     "jsx": "react-jsx",
     "types": ["@types/jest", "@types/node"]
   },
-  "include": ["src"]
+  "include": ["src", "types"]
 }
