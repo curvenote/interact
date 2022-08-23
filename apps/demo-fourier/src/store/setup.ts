@@ -1,10 +1,10 @@
-import { configureStore, Store } from "@reduxjs/toolkit";
-import { LivePageInvoker, logger, connect } from "common";
-import runtime from "@curvenote/runtime";
-import { register as basicRegister } from "@curvenote/components";
+import { configureStore, Store } from '@reduxjs/toolkit';
+import { connect } from 'common';
+import runtime from '@curvenote/runtime';
+import { register as basicRegister } from '@curvenote/components';
 
-import { combineReducers } from "@reduxjs/toolkit";
-import { thebeReducer } from "thebe-core";
+import { combineReducers } from '@reduxjs/toolkit';
+import { thebeReducer } from 'thebe-redux';
 
 export const reducers = combineReducers({
   thebe: thebeReducer,
@@ -15,11 +15,7 @@ export const reducers = combineReducers({
 export const store = configureStore({
   reducer: reducers,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
-      .concat(LivePageInvoker)
-      .concat(runtime.dangerousEvaluatation)
-      .concat(runtime.triggerEvaluate)
-      .concat(logger),
+    getDefaultMiddleware().concat(runtime.dangerousEvaluatation).concat(runtime.triggerEvaluate),
 });
 
 basicRegister(store as any);

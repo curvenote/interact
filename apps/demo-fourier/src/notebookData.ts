@@ -1,8 +1,14 @@
-import { CodeBlock } from "thebe-core/dist/notebook";
+// import { CodeBlock } from 'thebe-core';
+
+export interface CodeBlock {
+  id: string;
+  source: string;
+  [x: string]: any;
+}
 
 export const notebookData: CodeBlock[] = [
   {
-    id: "curvenote-cell-id-1",
+    id: 'curvenote-cell-id-1',
     source: `
 import matplotlib.pyplot as plt
 import math
@@ -27,7 +33,7 @@ c = [(A/(math.pi*(n+1)))*math.sin((n+1)*wo*(Tp/2)) for n in range(0,N)]
   // `,
   //   },
   {
-    id: "curvenote-cell-id-5",
+    id: 'curvenote-cell-id-5',
     source: `
 t = np.arange(-math.pi,math.pi,0.01)
 
@@ -45,7 +51,7 @@ if N < 15:
 `,
   },
   {
-    id: "curvenote-cell-id-6",
+    id: 'curvenote-cell-id-6',
     source: `
 Xs = np.sum(X, axis=0);
 plt.figure(figsize=(16,5))

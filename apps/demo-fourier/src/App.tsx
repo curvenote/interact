@@ -1,16 +1,16 @@
-import React from "react";
-import "./App.css";
-import { setupThebeCore } from "thebe-core";
-import { store } from "./store";
+import React from 'react';
+import './App.css';
+import { setupThebeRedux } from 'thebe-redux';
+import { store } from './store';
 
-import "@curvenote/article/dist/curvenote.css";
-import "common/dist/styles.css";
-import "thebe-core/dist/index.css";
+import '@curvenote/article/dist/curvenote.css';
+import 'common/dist/styles.css';
+import 'thebe-core/dist/index.css';
 
-import { Provider } from "react-redux";
-import MyArticle from "./MyArticle";
+import { Provider } from 'react-redux';
+import MyArticle from './MyArticle';
 
-setupThebeCore(store, true);
+setupThebeRedux();
 
 function App() {
   return (

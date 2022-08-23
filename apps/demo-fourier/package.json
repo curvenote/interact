@@ -31,12 +31,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "GENERATE_SOURCEMAP=false react-scripts start",
-    "build": "GENERATE_SOURCEMAP=false react-scripts build",
-    "deploy": "./patch_package.sh; GENERATE_SOURCEMAP=false react-scripts build; ./revert_package.sh; cp -R ./build/* ../../demo-fourier",
-    "test": "GENERATE_SOURCEMAP=false react-scripts test",
-    "test:watch": "GENERATE_SOURCEMAP=false yarn test --watch",
-    "eject": "react-scripts eject"
+    "start": "GENERATE_SOURCEMAP=false react-app-rewired start",
+    "build": "GENERATE_SOURCEMAP=false react-app-rewired build",
+    "deploy": "./patch_package.sh; GENERATE_SOURCEMAP=false react-app-rewired build; ./revert_package.sh; cp -R ./build/* ../../demo-fourier",
+    "test": "GENERATE_SOURCEMAP=false react-app-rewired test",
+    "test:watch": "GENERATE_SOURCEMAP=false yarn test --watch"
   },
   "homepage": "/",
   "eslintConfig": {
@@ -61,5 +60,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-app-rewired": "^2.2.1"
   }
 }

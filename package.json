@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "turbo run build",
+    "build:fourier": "turbo run build --filter=demo-fourier",
     "test": "turbo run test"
   },
   "repository": {

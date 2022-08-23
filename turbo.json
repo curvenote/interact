@@ -6,7 +6,14 @@
       "outputs": ["dist/**"]
     },
     "build#demo-fourier": {
-        "dependsOn": ["common", "thebe-redux"]
+      "dependsOn": ["common", "thebe-redux"],
+      "outputs": ["build/**"]
+    },
+    "build#demo-remix": {
+      "dependsOn": ["common", "thebe-redux"]
+    },
+    "build#demo-web": {
+      "dependsOn": ["common", "thebe-redux"]
     },
     "lint": {
       "outputs": []
