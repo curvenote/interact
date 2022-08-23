@@ -1,0 +1,45 @@
+import React, { useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { getContext } from 'thebe-redux';
+import { selectors as connectSelectors } from '../redux';
+
+function Output({
+  notebookId,
+  cellId,
+  runButton,
+  placeholder,
+}: {
+  notebookId?: string;
+  cellId: string;
+  runButton?: boolean;
+  placeholder?: React.ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (ref.current == null || !notebookId) return;
+    const ctx = getContext();
+    // const notebook = ctx.notebooks[notebookId];
+    // const cell = notebook.getCellById(cellId);
+    // cell?.attachToDOM(ref.current);
+  }, [notebookId, cellId]);
+
+  const activeKernelId = useSelector(connectSelectors.getActiveKernelId);
+
+  const clickPlay = () => {
+    console.log('click play', activeKernelId, cellId);
+    if (!activeKernelId || !notebookId) return;
+    // const ctx = getContext();
+    // const notebook = ctx.notebooks[notebookId];
+    // notebook?.executeUpTo(cellId);
+  };
+
+  return (
+    <div className="output">
+      {runButton && <button onClick={clickPlay}>{'>'}</button>}
+      <div ref={ref}>{placeholder}</div>
+    </div>
+  );
+}
+
+export default Output;

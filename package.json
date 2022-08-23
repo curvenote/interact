@@ -1,0 +1,29 @@
+{
+  "name": "interact",
+  "version": "1.0.0",
+  "description": "A set of standalone experiments on interactive computation",
+  "main": "index.js",
+  "scripts": {
+    "build": "turbo run build",
+    "build:fourier": "turbo run build --filter=demo-fourier",
+    "test": "turbo run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/curvenote/interact.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/curvenote/interact/issues"
+  },
+  "homepage": "https://github.com/curvenote/interact#readme",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "eslint": "^8.22.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "turbo": "^1.4.3"
+  }
+}

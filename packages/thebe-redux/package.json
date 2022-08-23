@@ -1,0 +1,33 @@
+{
+  "name": "thebe-redux",
+  "version": "0.0.1",
+  "description": "A redux connector library for thebe-core",
+  "main": "dist/cjs/index.js",
+  "types": "dist/types/index.d.ts",
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf dist",
+    "declarations": "tsc  --project ./tsconfig.json --declaration --emitDeclarationOnly --outDir dist/types",
+    "build:cjs": "tsc --project ./tsconfig.json",
+    "build": "npm run build:cjs; npm run declarations",
+    "dev": "npm run build:cjs -- -w",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "test:clear": "jest --clearCache",
+    "lint": "eslint \"src/**/!(*.spec).ts\" -c ./.eslintrc.js",
+    "lint:format": "npx prettier --check \"src/**/*.ts\""
+  },
+  "author": "Steve Purves <steve@curvenote.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.8.5",
+    "thebe-core": "^0.0.13"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.18.10",
+    "babel-jest": "^28.1.3",
+    "jest": "^28.1.2",
+    "jest-environment-jsdom": "^28.1.3",
+    "ts-jest": "^28.0.8"
+  }
+}
