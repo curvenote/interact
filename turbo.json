@@ -15,6 +15,9 @@
     "build#demo-web": {
       "dependsOn": ["common", "thebe-redux"]
     },
+    "start": {
+      "outputs": ["build/**"]
+    },
     "lint": {
       "outputs": []
     }

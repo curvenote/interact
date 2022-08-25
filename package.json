@@ -6,6 +6,7 @@
   "scripts": {
     "build": "turbo run build",
     "build:fourier": "turbo run build --filter=demo-fourier",
+    "start:fourier": "turbo run start --filter=demo-fourier",
     "test": "turbo run test"
   },
   "repository": {

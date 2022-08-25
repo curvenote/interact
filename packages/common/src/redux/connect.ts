@@ -37,16 +37,16 @@ const connect = createSlice({
 });
 
 // https://redux.js.org/usage/deriving-data-selectors#globalize-selectors-if-needed
-const getActiveServerId = (state: State) => state.connect.activeServerId;
-const getActiveKernelId = (state: State) => state.connect.activeKernelId;
-const getActiveNotebookId = (state: State) => state.connect.activeNotebookId;
-const getIsLive = (state: State) => state.connect.isLive;
+// const getActiveServerId = (state: State) => state.connect.activeServerId;
+// const getActiveKernelId = (state: State) => state.connect.activeKernelId;
+// const getActiveNotebookId = (state: State) => state.connect.activeNotebookId;
+// const getIsLive = (state: State) => state.connect.isLive;
 
-export const selectors = {
-  getActiveServerId,
-  getActiveKernelId,
-  getActiveNotebookId,
-  getIsLive,
-};
+// export const selectors = {
+//   getActiveServerId,
+//   getActiveKernelId,
+//   getActiveNotebookId,
+//   getIsLive,
+// };
 
 export default connect;

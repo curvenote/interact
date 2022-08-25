@@ -1,14 +1,20 @@
-import { combineReducers } from '@reduxjs/toolkit';
+import { combineReducers, StateFromReducersMapObject } from '@reduxjs/toolkit';
 import servers from './servers';
 import messages from './messages';
 import sessions from './sessions';
 
-export const thebeReducer = combineReducers({
+const thebeReducerMap = {
   servers: servers.reducer,
   sessions: sessions.reducer,
   messages: messages.reducer,
-});
+};
 
-export const rootReducer = combineReducers({ thebe: thebeReducer });
+export const thebeReducer = combineReducers(thebeReducerMap);
 
-export type State = ReturnType<typeof rootReducer>;
+const rootReducerMap = {
+  thebe: thebeReducer,
+};
+
+export const rootReducer = combineReducers(rootReducerMap);
+
+export type State = StateFromReducersMapObject<typeof rootReducerMap>;

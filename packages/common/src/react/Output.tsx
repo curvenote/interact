@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { getContext } from 'thebe-redux';
-import { selectors as connectSelectors } from '../redux';
+import { getContext, selectors } from 'thebe-redux';
 
 function Output({
   notebookId,
@@ -18,17 +17,17 @@ function Output({
 
   useEffect(() => {
     if (ref.current == null || !notebookId) return;
-    const ctx = getContext();
+    // const ctx = getContext();
     // const notebook = ctx.notebooks[notebookId];
     // const cell = notebook.getCellById(cellId);
     // cell?.attachToDOM(ref.current);
   }, [notebookId, cellId]);
 
-  const activeKernelId = useSelector(connectSelectors.getActiveKernelId);
+  const activeSession = useSelector(selectors.selectActiveSession);
 
   const clickPlay = () => {
-    console.log('click play', activeKernelId, cellId);
-    if (!activeKernelId || !notebookId) return;
+    console.log('click play', activeSession, cellId);
+    if (!activeSession || !notebookId) return;
     // const ctx = getContext();
     // const notebook = ctx.notebooks[notebookId];
     // notebook?.executeUpTo(cellId);

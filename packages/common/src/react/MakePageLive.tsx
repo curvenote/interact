@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { KernelStatus } from 'thebe-core/dist/store/kernels';
-import { ServerStatus } from 'thebe-core/dist/store/servers';
 import { FiPower } from 'react-icons/fi';
 import classNames from 'classnames';
-import useBinder, { useJupyterKernel, useLocalJupyter } from './hooks';
+import useBinder, { useJupyterSession, useLocalJupyter } from './hooks';
+import { ServerStatus, SessionStatus } from 'thebe-core';
 
 function MakePageLive({
   notebookId,
@@ -29,16 +28,18 @@ function MakePageLive({
     repo,
     branch,
   );
-  const { requested: localRequested, serverInfo: localServerInfo } = useLocalJupyter(
-    connect && local,
-    notebookId,
-  );
+  // const { requested: localRequested, serverInfo: localServerInfo } = useLocalJupyter(
+  //   connect && local,
+  //   notebookId,
+  // );
+  const localRequested = false;
+  const localServerInfo = { id: 'unknown', status: undefined, message: '' };
 
   const requested = binderRequested || localRequested;
   const serverInfo = binderServerInfo ?? localServerInfo;
 
-  const { kernelInfo, isLive } = useJupyterKernel(
-    serverInfo?.status === ServerStatus.ready,
+  const { sessionInfo, isLive } = useJupyterSession(
+    (serverInfo?.status ?? false) && serverInfo.status === ServerStatus.ready,
     notebookId,
     serverInfo?.id,
     kernelName,
@@ -50,8 +51,10 @@ function MakePageLive({
   };
 
   let message = 'Click to connect to a server/kernel and make the page live';
-  if (serverInfo && serverInfo?.status !== ServerStatus.ready) message = serverInfo?.message;
-  else if (kernelInfo && kernelInfo.status !== KernelStatus.ready)
+  if (serverInfo && serverInfo?.status !== ServerStatus.ready && serverInfo?.message) {
+    console.log({ message });
+    message = serverInfo?.message;
+  } else if (sessionInfo && sessionInfo.status !== SessionStatus.ready)
     message = `Connecting to kernel: ${kernelName}`;
   // TODO errors!
   else if (isLive) message = `Connected to kernel: ${kernelName}`;

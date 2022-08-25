@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { ServerInfo } from 'thebe-redux';
+import { selectors, actions } from 'thebe-redux';
 import type { State } from '../redux/types';
-import { selectors, connect } from '../redux';
+import { connect } from '../redux';
 import {
   connectToCurvenoteBinder,
   connectToKernel,
   connectToLocalServer,
   connectToPublicBinder,
 } from '../utils';
+import { BinderOptions } from 'thebe-core';
 
 function useBinder(
   start: boolean,
   curvenote: boolean,
   notebookId?: string,
   repo?: string,
-  branch?: string,
+  ref?: string,
 ): {
   requested: boolean;
   serverInfo?: ServerInfo;
@@ -23,24 +25,32 @@ function useBinder(
   const [requested, setRequested] = useState(false);
   const dispatch = useDispatch();
 
-  const activeServerId = useSelector(selectors.getActiveServerId);
-
-  const serverInfo = useSelector((state: State) => {
-    if (!activeServerId) return;
-    return state.thebe.servers[activeServerId];
-  });
+  const serverInfo = useSelector(selectors.selectActiveServer);
 
   useEffect(() => {
     if (!notebookId || requested || !start) return;
     setRequested(true);
 
-    const p = curvenote
-      ? connectToCurvenoteBinder(repo, branch)
-      : connectToPublicBinder(repo, branch);
-    p.then((server) => {
-      // dispatch(connect.actions.setActiveServerId(server.id));
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (curvenote) {
+      dispatch(
+        actions.connectToBinder({
+          binderOptions: {
+            binderUrl: 'https://binder.curvenote.dev/services/binder/',
+            repo: ref ?? 'curvenote/binder-base',
+            ref: ref ?? 'main',
+          } as BinderOptions, // TODO fix options in thebe-core
+        }),
+      );
+    } else {
+      dispatch(actions.connectToBinder({}));
+    }
+
+    // const p = curvenote
+    //   ? connectToCurvenoteBinder(repo, branch)
+    //   : connectToPublicBinder(repo, branch);
+    // p.then((server) => {
+    //   // dispatch(connect.actions.setActiveServerId(server.id));
+    // });
   }, [notebookId, requested, start]);
 
   return { requested, serverInfo };
@@ -50,26 +60,24 @@ export function useLocalJupyter(start: boolean, notebookId?: string) {
   const [requested, setRequested] = useState(false);
   const dispatch = useDispatch();
 
-  const activeServerId = useSelector(selectors.getActiveServerId);
-
-  const serverInfo = useSelector((state: State) => {
-    if (!activeServerId) return;
-    return state.thebe.servers[activeServerId];
-  });
+  const serverInfo = useSelector(selectors.selectActiveServer);
 
   useEffect(() => {
     if (!notebookId || requested || !start) return;
     setRequested(true);
-    connectToLocalServer().then((server) => {
-      // dispatch(connect.actions.setActiveServerId(server.id));
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // TODO
+    // dispatch(connectToJupyter)
+
+    // connectToLocalServer().then((server) => {
+    //   // dispatch(connect.actions.setActiveServerId(server.id));
+    // });
   }, [notebookId, requested, start]);
 
   return { requested, serverInfo };
 }
 
-export function useJupyterKernel(
+export function useJupyterSession(
   start: boolean,
   notebookId?: string,
   activeServerId?: string,
@@ -77,33 +85,21 @@ export function useJupyterKernel(
 ) {
   const dispatch = useDispatch();
 
-  const activeKernelId = useSelector(selectors.getActiveKernelId);
-  const isLive = useSelector(selectors.getIsLive);
-  // TODO selector - get active selector
-  const kernelInfo = useSelector((state: State) => {
-    if (!activeKernelId) return;
-    // return state.thebe.kernels[activeKernelId] ?? {};
-    return {};
-  });
+  const activeServerInfo = useSelector(selectors.selectActiveServer);
+  const activeSessionInfo = useSelector((state: State) =>
+    selectors.selectActiveSessionForServer(state, activeServerInfo?.id),
+  );
+  const isLive = useSelector(selectors.selectIsLive);
 
   useEffect(() => {
-    if (!activeServerId || !start) return;
-    connectToKernel(activeServerId, kernelName).then((kernel) => {
-      // dispatch(connect.actions.setActiveKernelId(kernel.id));
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!activeServerInfo || !start) return;
+    // TODO better session name and path mapping, get info from the notebook instance?
+    dispatch(
+      actions.requestSession(activeServerInfo.id, kernelName, `{kernelName}.ipynb`, kernelName),
+    );
   }, [activeServerId, start]);
 
-  useEffect(() => {
-    // if (!notebookId || !activeKernelId || kernelInfo?.status !== KernelStatus.ready || isLive)
-    //   return;
-
-    // dispatch(thebeActions.thunks.notebooks.attachKernel(notebookId, activeKernelId));
-    dispatch(connect.actions.setIsLive(true));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [notebookId, activeKernelId]);
-
-  return { kernelInfo, isLive };
+  return { serverInfo: activeServerInfo, sessionInfo: activeSessionInfo, isLive };
 }
 
 export default useBinder;

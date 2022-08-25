@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import { ThebeNotebook } from 'thebe-core';
 import { RVar, RScope, RDisplay, RDynamic, RRange } from 'common/dist/react/components';
-import { Output, selectors, connect, fetchNotebook } from 'common';
+import { Output, connect, fetchNotebook, MakePageLive } from 'common';
 import { notebookData } from './notebookData';
 import { AppDispatch } from './store';
 
 function MyArticle() {
   const dispatch = useDispatch<AppDispatch>();
-  const notebookId = useSelector(selectors.getActiveNotebookId);
+  // const notebookId = useSelector(selectors.getActiveNotebookId);
+  const notebookId = '1234';
 
   useEffect(() => {
     dispatch(fetchNotebook(notebookData)).then((nb: any) => {
@@ -26,7 +26,7 @@ function MyArticle() {
         <RVar name="N" value={8} format=".2f"></RVar>
       </div>
       <article className="centered">
-        {/* <MakePageLive curvenote notebookId={notebookId} /> */}
+        <MakePageLive curvenote notebookId={notebookId} />
         <h1>Fourier Series</h1>
         <p>
           Fourier series are powerful function and signal representation, capable of representing
