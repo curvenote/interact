@@ -28,18 +28,20 @@ function MakePageLive({
     repo,
     branch,
   );
-  // const { requested: localRequested, serverInfo: localServerInfo } = useLocalJupyter(
-  //   connect && local,
-  //   notebookId,
-  // );
-  const localRequested = false;
-  const localServerInfo = { id: 'unknown', status: undefined, message: '' };
+
+  const { requested: localRequested, serverInfo: localServerInfo } = useLocalJupyter(
+    connect && local,
+    notebookId,
+  );
+
+  // const localRequested = false;
+  // const localServerInfo = { id: 'unknown', status: undefined, message: '' };
 
   const requested = binderRequested || localRequested;
   const serverInfo = binderServerInfo ?? localServerInfo;
 
   const { sessionInfo, isLive } = useJupyterSession(
-    (serverInfo?.status ?? false) && serverInfo.status === ServerStatus.ready,
+    (serverInfo?.status ?? false) && serverInfo?.status === ServerStatus.ready,
     notebookId,
     serverInfo?.id,
     kernelName,
@@ -58,6 +60,7 @@ function MakePageLive({
     message = `Connecting to kernel: ${kernelName}`;
   // TODO errors!
   else if (isLive) message = `Connected to kernel: ${kernelName}`;
+  else if (connect) message = 'Connecting...';
 
   return (
     <div className="just-make-live">

@@ -1,7 +1,7 @@
 import type { ThunkAction, AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import servers from './servers';
 import type { State } from './reducers';
-import type { Options, MessageCallbackArgs } from 'thebe-core';
+import type { Options, MessageCallbackArgs, KernelOptions } from 'thebe-core';
 import {
   ServerStatus,
   SessionStatus,
@@ -64,12 +64,45 @@ export function connectToBinder(
       useBinder: true,
       useJupyterLite: false,
     });
-    // add server with launching status early to avoid any race
     dispatch(
       servers.actions.add({ id, status: ServerStatus.launching, message: 'Launching server...' }),
     );
     dispatch(servers.actions.activate({ id, active: true }));
     const server = ThebeServer.connectToServerViaBinder(options, connectMessagesToRedux(dispatch));
+    server.then((s) => addObjectToContext(s));
+    return server;
+  };
+}
+
+export function connectToJupyter(
+  opts: Partial<Options>,
+): ThunkAction<void, State, unknown, AnyAction> {
+  return async (dispatch) => {
+    const id = opts.id ?? nanoid();
+    const options = ensureOptions({
+      ...opts,
+      id,
+      useBinder: false,
+      useJupyterLite: false,
+      kernelOptions: {
+        ...opts.kernelOptions,
+        serverSettings: {
+          appendToken: true,
+          baseUrl: 'http://localhost:8888',
+          token: 'test-secret',
+          ...opts.kernelOptions?.serverSettings,
+        },
+      } as KernelOptions,
+    });
+    dispatch(
+      servers.actions.add({
+        id,
+        status: ServerStatus.launching,
+        message: 'Launching server...',
+      }),
+    );
+    dispatch(servers.actions.activate({ id, active: true }));
+    const server = ThebeServer.connectToJupyterServer(options, connectMessagesToRedux(dispatch));
     server.then((s) => addObjectToContext(s));
     return server;
   };

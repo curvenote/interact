@@ -26,7 +26,7 @@ function MyArticle() {
         <RVar name="N" value={8} format=".2f"></RVar>
       </div>
       <article className="centered">
-        <MakePageLive curvenote notebookId={notebookId} />
+        <MakePageLive local notebookId={notebookId} />
         <h1>Fourier Series</h1>
         <p>
           Fourier series are powerful function and signal representation, capable of representing

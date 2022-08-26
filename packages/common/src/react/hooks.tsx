@@ -66,12 +66,7 @@ export function useLocalJupyter(start: boolean, notebookId?: string) {
     if (!notebookId || requested || !start) return;
     setRequested(true);
 
-    // TODO
-    // dispatch(connectToJupyter)
-
-    // connectToLocalServer().then((server) => {
-    //   // dispatch(connect.actions.setActiveServerId(server.id));
-    // });
+    dispatch(actions.connectToJupyter({}));
   }, [notebookId, requested, start]);
 
   return { requested, serverInfo };
