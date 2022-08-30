@@ -34,16 +34,13 @@ function MakePageLive({
     notebookId,
   );
 
-  // const localRequested = false;
-  // const localServerInfo = { id: 'unknown', status: undefined, message: '' };
-
   const requested = binderRequested || localRequested;
   const serverInfo = binderServerInfo ?? localServerInfo;
 
   const { sessionInfo, isLive } = useJupyterSession(
     (serverInfo?.status ?? false) && serverInfo?.status === ServerStatus.ready,
-    notebookId,
     serverInfo?.id,
+    notebookId,
     kernelName,
   );
 
@@ -52,14 +49,18 @@ function MakePageLive({
     setConnect(true);
   };
 
+  console.log(isLive);
+
   let message = 'Click to connect to a server/kernel and make the page live';
-  if (serverInfo && serverInfo?.status !== ServerStatus.ready && serverInfo?.message) {
-    console.log({ message });
+
+  if (isLive) message = `Connected to kernel: ${kernelName}`;
+  else if (sessionInfo && sessionInfo.status !== SessionStatus.ready)
+    message = `Starting session and connecting to kernel: ${kernelName}`;
+  else if (
+    (serverInfo && serverInfo?.status !== ServerStatus.ready && serverInfo?.message) ||
+    (serverInfo && serverInfo?.status === ServerStatus.ready && !sessionInfo)
+  )
     message = serverInfo?.message;
-  } else if (sessionInfo && sessionInfo.status !== SessionStatus.ready)
-    message = `Connecting to kernel: ${kernelName}`;
-  // TODO errors!
-  else if (isLive) message = `Connected to kernel: ${kernelName}`;
   else if (connect) message = 'Connecting...';
 
   return (

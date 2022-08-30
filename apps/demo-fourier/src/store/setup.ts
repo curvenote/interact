@@ -1,5 +1,4 @@
 import { configureStore, Store } from '@reduxjs/toolkit';
-import { connect } from 'common';
 import runtime from '@curvenote/runtime';
 import { register as basicRegister } from '@curvenote/components';
 
@@ -8,7 +7,6 @@ import { thebeReducer } from 'thebe-redux';
 
 export const reducers = combineReducers({
   thebe: thebeReducer,
-  connect: connect.reducer,
   runtime: runtime.reducer,
 });
 

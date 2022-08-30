@@ -1,14 +1,8 @@
 import type { ThunkAction, AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import servers from './servers';
 import type { State } from './reducers';
-import type { Options, MessageCallbackArgs, KernelOptions } from 'thebe-core';
-import {
-  ServerStatus,
-  SessionStatus,
-  ThebeServer,
-  ensureOptions,
-  MessageSubject,
-} from 'thebe-core';
+import type { CoreOptions, MessageCallbackArgs, KernelOptions } from 'thebe-core';
+import { ServerStatus, SessionStatus, ThebeServer, MessageSubject } from 'thebe-core';
 import { addObjectToContext, getObjectFromContext } from './context';
 import messages from './messages';
 import sessions from './sessions';
@@ -53,21 +47,20 @@ export function connectMessagesToRedux(dispatch: ThunkDispatch<State, unknown, A
 }
 
 export function connectToBinder(
-  opts: Partial<Options>,
+  opts: CoreOptions & { id?: string },
 ): ThunkAction<void, State, unknown, AnyAction> {
   return async (dispatch) => {
     // create our own id's
     const id = opts.id ?? nanoid();
-    const options = ensureOptions({
+    const options = {
       ...opts,
       id,
       useBinder: true,
       useJupyterLite: false,
-    });
+    };
     dispatch(
       servers.actions.add({ id, status: ServerStatus.launching, message: 'Launching server...' }),
     );
-    dispatch(servers.actions.activate({ id, active: true }));
     const server = ThebeServer.connectToServerViaBinder(options, connectMessagesToRedux(dispatch));
     server.then((s) => addObjectToContext(s));
     return server;
@@ -75,25 +68,16 @@ export function connectToBinder(
 }
 
 export function connectToJupyter(
-  opts: Partial<Options>,
+  opts: CoreOptions & { id?: string },
 ): ThunkAction<void, State, unknown, AnyAction> {
   return async (dispatch) => {
     const id = opts.id ?? nanoid();
-    const options = ensureOptions({
+    const options = {
       ...opts,
       id,
       useBinder: false,
       useJupyterLite: false,
-      kernelOptions: {
-        ...opts.kernelOptions,
-        serverSettings: {
-          appendToken: true,
-          baseUrl: 'http://localhost:8888',
-          token: 'test-secret',
-          ...opts.kernelOptions?.serverSettings,
-        },
-      } as KernelOptions,
-    });
+    };
     dispatch(
       servers.actions.add({
         id,
@@ -101,7 +85,6 @@ export function connectToJupyter(
         message: 'Launching server...',
       }),
     );
-    dispatch(servers.actions.activate({ id, active: true }));
     const server = ThebeServer.connectToJupyterServer(options, connectMessagesToRedux(dispatch));
     server.then((s) => addObjectToContext(s));
     return server;
@@ -117,7 +100,7 @@ export function requestSession(
 ): ThunkAction<void, State, unknown, AnyAction> {
   return async (dispatch) => {
     const server = getObjectFromContext<ThebeServer>(serverId);
-    if (server && server.isReady()) {
+    if (server && server.isReady) {
       const id = externalId ?? nanoid();
       dispatch(
         sessions.actions.add({
@@ -127,7 +110,6 @@ export function requestSession(
           message: 'Starting new session...',
         }),
       );
-      dispatch(sessions.actions.activate({ id, active: true }));
       const session = server.requestSession({
         id,
         name,

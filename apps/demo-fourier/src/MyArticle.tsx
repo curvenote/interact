@@ -10,12 +10,11 @@ function MyArticle() {
   // const notebookId = useSelector(selectors.getActiveNotebookId);
   const notebookId = '1234';
 
-  useEffect(() => {
-    dispatch(fetchNotebook(notebookData)).then((nb: any) => {
-      dispatch(connect.actions.setActiveNotebookId(nb.id));
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   dispatch(fetchNotebook(notebookData)).then((nb: any) => {
+  //     dispatch(connect.actions.setActiveNotebookId(nb.id));
+  //   });
+  // }, []);
 
   return (
     <RScope name="page">

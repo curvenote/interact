@@ -3,14 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { ServerInfo } from 'thebe-redux';
 import { selectors, actions } from 'thebe-redux';
 import type { State } from '../redux/types';
-import { connect } from '../redux';
-import {
-  connectToCurvenoteBinder,
-  connectToKernel,
-  connectToLocalServer,
-  connectToPublicBinder,
-} from '../utils';
-import { BinderOptions } from 'thebe-core';
+import { nanoid } from '@reduxjs/toolkit';
 
 function useBinder(
   start: boolean,
@@ -22,79 +15,70 @@ function useBinder(
   requested: boolean;
   serverInfo?: ServerInfo;
 } {
-  const [requested, setRequested] = useState(false);
+  const [serverId, setServerId] = useState<string | undefined>();
   const dispatch = useDispatch();
 
-  const serverInfo = useSelector(selectors.selectActiveServer);
+  const serverInfo = useSelector((state: State) => selectors.selectServer(state, serverId));
 
   useEffect(() => {
-    if (!notebookId || requested || !start) return;
-    setRequested(true);
+    if (!notebookId || serverId !== undefined || !start) return;
+    const id = nanoid();
+    setServerId(id);
+    dispatch(
+      actions.connectToBinder({
+        id,
+        binderOptions: {
+          binderUrl: curvenote ? 'https://binder.curvenote.dev/services/binder/' : undefined,
+          repo: ref ?? 'curvenote/binder-base',
+          ref: ref ?? 'main',
+        },
+      }),
+    );
+  }, [notebookId, serverId, start]);
 
-    if (curvenote) {
-      dispatch(
-        actions.connectToBinder({
-          binderOptions: {
-            binderUrl: 'https://binder.curvenote.dev/services/binder/',
-            repo: ref ?? 'curvenote/binder-base',
-            ref: ref ?? 'main',
-          } as BinderOptions, // TODO fix options in thebe-core
-        }),
-      );
-    } else {
-      dispatch(actions.connectToBinder({}));
-    }
-
-    // const p = curvenote
-    //   ? connectToCurvenoteBinder(repo, branch)
-    //   : connectToPublicBinder(repo, branch);
-    // p.then((server) => {
-    //   // dispatch(connect.actions.setActiveServerId(server.id));
-    // });
-  }, [notebookId, requested, start]);
-
-  return { requested, serverInfo };
+  return { requested: serverId !== undefined, serverInfo };
 }
 
 export function useLocalJupyter(start: boolean, notebookId?: string) {
-  const [requested, setRequested] = useState(false);
+  const [serverId, setServerId] = useState<string | undefined>();
   const dispatch = useDispatch();
 
-  const serverInfo = useSelector(selectors.selectActiveServer);
+  const serverInfo = useSelector((state: State) => selectors.selectServer(state, serverId));
 
   useEffect(() => {
-    if (!notebookId || requested || !start) return;
-    setRequested(true);
+    if (!notebookId || serverId !== undefined || !start) return;
+    const id = nanoid();
+    setServerId(id);
+    dispatch(actions.connectToJupyter({ id }));
+  }, [notebookId, serverId !== undefined, start]);
 
-    dispatch(actions.connectToJupyter({}));
-  }, [notebookId, requested, start]);
-
-  return { requested, serverInfo };
+  return { requested: serverId !== undefined, serverInfo };
 }
 
 export function useJupyterSession(
   start: boolean,
+  serverId: string | undefined,
   notebookId?: string,
-  activeServerId?: string,
   kernelName = 'python3',
 ) {
+  const [sessionId, setSessionId] = useState<string | undefined>();
   const dispatch = useDispatch();
 
-  const activeServerInfo = useSelector(selectors.selectActiveServer);
-  const activeSessionInfo = useSelector((state: State) =>
-    selectors.selectActiveSessionForServer(state, activeServerInfo?.id),
-  );
-  const isLive = useSelector(selectors.selectIsLive);
+  const serverInfo = useSelector((state: State) => selectors.selectServer(state, serverId));
+  const sessionInfo = useSelector((state: State) => selectors.selectSession(state, sessionId));
+  const isLive = useSelector((state: State) => selectors.selectIsLive(state, serverId, sessionId));
 
   useEffect(() => {
-    if (!activeServerInfo || !start) return;
+    if (!serverInfo || sessionId !== undefined || !start) return;
+    const id = nanoid();
+    setSessionId(id);
     // TODO better session name and path mapping, get info from the notebook instance?
     dispatch(
-      actions.requestSession(activeServerInfo.id, kernelName, `{kernelName}.ipynb`, kernelName),
+      actions.requestSession(serverInfo.id, kernelName, `{kernelName}.ipynb`, kernelName, id),
     );
-  }, [activeServerId, start]);
+  }, [serverInfo, sessionId, start]);
 
-  return { serverInfo: activeServerInfo, sessionInfo: activeSessionInfo, isLive };
+  return { serverInfo: serverInfo, sessionInfo: sessionInfo, isLive };
 }
 
 export default useBinder;

@@ -16,7 +16,9 @@
       "dependsOn": ["common", "thebe-redux"]
     },
     "start": {
-      "outputs": ["build/**"]
+      "dependsOn": ["^build"],
+      "outputs": [],
+      "cache": false
     },
     "lint": {
       "outputs": []
