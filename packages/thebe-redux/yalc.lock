@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "thebe-core": {
-      "signature": "a0974ad55e4b813a23ea3fc8b6750a58",
+      "signature": "1288cd5e375685bbfcce4c23239fdb4c",
       "file": true,
       "replaced": "^0.0.13"
     }

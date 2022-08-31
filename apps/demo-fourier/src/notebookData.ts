@@ -1,10 +1,4 @@
-// import { CodeBlock } from 'thebe-core';
-
-export interface CodeBlock {
-  id: string;
-  source: string;
-  [x: string]: any;
-}
+import { CodeBlock } from 'thebe-core';
 
 export const notebookData: CodeBlock[] = [
   {

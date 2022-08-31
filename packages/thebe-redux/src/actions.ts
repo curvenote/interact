@@ -1,12 +1,21 @@
 import type { ThunkAction, AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
 import servers from './servers';
 import type { State } from './reducers';
-import type { CoreOptions, MessageCallbackArgs, KernelOptions } from 'thebe-core';
-import { ServerStatus, SessionStatus, ThebeServer, MessageSubject } from 'thebe-core';
+import type { CodeBlock, CoreOptions, MessageCallbackArgs, ThebeSession } from 'thebe-core';
+import {
+  NotebookStatus,
+  makeConfiguration,
+  ThebeNotebook,
+  ServerStatus,
+  SessionStatus,
+  ThebeServer,
+  MessageSubject,
+} from 'thebe-core';
 import { addObjectToContext, getObjectFromContext } from './context';
 import messages from './messages';
 import sessions from './sessions';
 import { nanoid } from 'nanoid';
+import notebooks from './notebooks';
 
 export const slices = {
   servers: servers.actions,
@@ -17,6 +26,8 @@ export const slices = {
 export function clear(): ThunkAction<void, State, unknown, AnyAction> {
   return (dispatch) => {
     dispatch(servers.actions.clear());
+    dispatch(sessions.actions.clear());
+    dispatch(notebooks.actions.clear());
   };
 }
 
@@ -48,7 +59,7 @@ export function connectMessagesToRedux(dispatch: ThunkDispatch<State, unknown, A
 
 export function connectToBinder(
   opts: CoreOptions & { id?: string },
-): ThunkAction<void, State, unknown, AnyAction> {
+): ThunkAction<Promise<ThebeServer>, State, unknown, AnyAction> {
   return async (dispatch) => {
     // create our own id's
     const id = opts.id ?? nanoid();
@@ -69,7 +80,7 @@ export function connectToBinder(
 
 export function connectToJupyter(
   opts: CoreOptions & { id?: string },
-): ThunkAction<void, State, unknown, AnyAction> {
+): ThunkAction<Promise<ThebeServer>, State, unknown, AnyAction> {
   return async (dispatch) => {
     const id = opts.id ?? nanoid();
     const options = {
@@ -97,7 +108,7 @@ export function requestSession(
   path?: string,
   kernelName?: string,
   externalId?: string,
-): ThunkAction<void, State, unknown, AnyAction> {
+): ThunkAction<Promise<ThebeSession | undefined>, State, unknown, AnyAction> {
   return async (dispatch) => {
     const server = getObjectFromContext<ThebeServer>(serverId);
     if (server && server.isReady) {
@@ -119,5 +130,31 @@ export function requestSession(
       session.then((s) => addObjectToContext(s));
       return session;
     }
+  };
+}
+
+export function createNotebook(
+  opts: CoreOptions & { id?: string },
+  blocks: CodeBlock[],
+  name = 'notebook',
+  path = 'notebooks.ipynb',
+): ThunkAction<ThebeNotebook, State, unknown, AnyAction> {
+  return (dispatch) => {
+    const config = makeConfiguration(opts);
+    const notebook = ThebeNotebook.fromCodeBlocks(
+      blocks,
+      config.mathjax,
+      connectMessagesToRedux(dispatch),
+    );
+    dispatch(
+      notebooks.actions.add({
+        id: notebook.id,
+        name,
+        path,
+        status: NotebookStatus.changed,
+      }),
+    );
+    addObjectToContext(notebook);
+    return notebook;
   };
 }

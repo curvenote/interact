@@ -8,11 +8,3 @@ export interface CodeBlock {
   id: string;
   source: string;
 }
-
-export const fetchNotebook =
-  (mockData?: CodeBlock[]): ThunkAction<Promise<ThebeNotebook>, State, unknown, AnyAction> =>
-  async (): Promise<ThebeNotebook> => {
-    // TODO query api to get notebookData
-    // load data into thebe
-    return ThebeNotebook.fromCodeBlocks(mockData ?? [], {});
-  };

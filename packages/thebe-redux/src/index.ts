@@ -1,4 +1,3 @@
-import type { Store } from '@reduxjs/toolkit';
 import { configureStore } from '@reduxjs/toolkit';
 import { rootReducer } from './reducers';
 import { setupThebeCore } from 'thebe-core';

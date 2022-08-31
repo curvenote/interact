@@ -1,20 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RVar, RScope, RDisplay, RDynamic, RRange } from 'common/dist/react/components';
-import { Output, connect, fetchNotebook, MakePageLive } from 'common';
+import { Output, MakePageLive } from 'common';
 import { notebookData } from './notebookData';
-import { AppDispatch } from './store';
+import { AppDispatch, State } from './store';
+import { CodeBlock, ThebeNotebook } from 'thebe-core';
+import { actions } from 'thebe-redux';
+import { AnyAction, ThunkAction } from '@reduxjs/toolkit';
+
+export const fetchNotebook =
+  (): ThunkAction<Promise<CodeBlock[]>, State, unknown, AnyAction> =>
+  async (): Promise<CodeBlock[]> =>
+    notebookData;
 
 function MyArticle() {
   const dispatch = useDispatch<AppDispatch>();
-  // const notebookId = useSelector(selectors.getActiveNotebookId);
-  const notebookId = '1234';
+  const [notebookId, setNotebookId] = useState<string | undefined>();
 
-  // useEffect(() => {
-  //   dispatch(fetchNotebook(notebookData)).then((nb: any) => {
-  //     dispatch(connect.actions.setActiveNotebookId(nb.id));
-  //   });
-  // }, []);
+  useEffect(() => {
+    const notebook = dispatch(actions.createNotebook({}, notebookData));
+    setNotebookId(notebook.id);
+  }, []);
 
   return (
     <RScope name="page">

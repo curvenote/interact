@@ -1,6 +1,6 @@
-import type { ThebeServer, ThebeSession } from 'thebe-core';
+import type { ThebeNotebook, ThebeServer, ThebeSession } from 'thebe-core';
 
-export type ContextObject = ThebeServer | ThebeSession;
+export type ContextObject = ThebeServer | ThebeSession | ThebeNotebook;
 
 interface ContextItem {
   id: string;
