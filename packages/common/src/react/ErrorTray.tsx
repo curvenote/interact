@@ -6,7 +6,7 @@ function ErrorTray() {
   return (
     <div className="just-make-live">
       <button className={classNames('just-make-live-button')} disabled={true}>
-        <FiThermometer />
+        <FiThermometer />!
       </button>
       <div className="just-make-live-panel">{'message'}</div>
     </div>

@@ -1,9 +1,9 @@
-import { CellInfo } from "thebe-core";
-import JSON5 from "json5";
+import type { CellInfo } from 'thebe-core';
+import JSON5 from 'json5';
 
 enum VariableMapKind {
-  "param" = "param",
-  "output" = "output",
+  'param' = 'param',
+  'output' = 'output',
 }
 
 export interface VariableMapInfo {
@@ -13,15 +13,15 @@ export interface VariableMapInfo {
   metadata?: Record<string, any>;
 }
 
-const REGEX_PARAM = "(.*)#\\s*@param(.*)";
-const REGEX_ASSIGNMENT = "(.*)=(.*[^;])[;]*";
-const REGEX_OUTPUT = "(.*)#\\s*@output(.*)";
+const REGEX_PARAM = '(.*)#\\s*@param(.*)';
+const REGEX_ASSIGNMENT = '(.*)=(.*[^;])[;]*';
+const REGEX_OUTPUT = '(.*)#\\s*@output(.*)';
 
 export type VariableMap = Record<string, VariableMapInfo>;
 export type ValueMap = Record<string, string | number | boolean>;
 
 function parseLine(source: string, kind: VariableMapKind, REGEX_KIND: string) {
-  return source.split("\n").reduce((mapping, line) => {
+  return source.split('\n').reduce((mapping, line) => {
     const match = line.match(REGEX_KIND);
     if (match) {
       const [_, assignment, maybeMetadata] = match;
@@ -34,11 +34,11 @@ function parseLine(source: string, kind: VariableMapKind, REGEX_KIND: string) {
       if (assignmentMatch) {
         let [_, name, value] = assignmentMatch;
         name = name.trimStart().trimEnd();
-        value = value.trimStart().trimEnd().replace(";", "");
+        value = value.trimStart().trimEnd().replace(';', '');
         const maybeNumber = parseFloat(value);
         let maybeBoolean;
-        if (value.toLowerCase() === "true") maybeBoolean = true;
-        else if (value.toLowerCase() === "false") maybeBoolean = false;
+        if (value.toLowerCase() === 'true') maybeBoolean = true;
+        else if (value.toLowerCase() === 'false') maybeBoolean = false;
 
         let initial;
         if (!isNaN(maybeNumber)) initial = maybeNumber;
@@ -77,52 +77,43 @@ class Interpolator {
         ...mapping,
         ...Interpolator.parseSource(cellInfo.source),
       }),
-      {}
+      {},
     );
   }
 
-  static interpolateParams(
-    source: string,
-    mapping: VariableMap,
-    values: ValueMap
-  ) {
-    const result = source
-      .split("\n")
-      .reduce((interpolated: string, line: string) => {
-        if (line.length === 0) return interpolated;
-        const match = line.match(REGEX_PARAM);
-        if (match) {
-          const [_, assignment] = match;
-          const assignmentMatch = assignment.match(REGEX_ASSIGNMENT);
-          if (assignmentMatch) {
-            let [_, name] = assignmentMatch;
-            name = name.trimStart().trimEnd();
+  static interpolateParams(source: string, mapping: VariableMap, values: ValueMap) {
+    const result = source.split('\n').reduce((interpolated: string, line: string) => {
+      if (line.length === 0) return interpolated;
+      const match = line.match(REGEX_PARAM);
+      if (match) {
+        const [_, assignment] = match;
+        const assignmentMatch = assignment.match(REGEX_ASSIGNMENT);
+        if (assignmentMatch) {
+          let [_, name] = assignmentMatch;
+          name = name.trimStart().trimEnd();
 
-            // TODO could do checking here against metadata, e.g. enforce bounds
-            console.log("Interpolator", name, values[name]);
-            const value = values[name] ?? mapping[name].initial ?? undefined;
-            if (value) {
-              let newAssignment;
-              if (typeof value === "string") {
-                newAssignment = `${name}="${value}" # @param`;
-              } else if (typeof value === "boolean") {
-                newAssignment = `${name}=${value ? "True" : "False"} # @param`;
-              } else {
-                newAssignment = `${name}=${value} # @param`;
-              }
-
-              console.debug(
-                "Interpolator:interpolateParams ",
-                `${line} => ${newAssignment}`
-              );
-              return interpolated.length === 0
-                ? `${newAssignment}`
-                : `${interpolated}\n${newAssignment}`;
+          // TODO could do checking here against metadata, e.g. enforce bounds
+          console.log('Interpolator', name, values[name]);
+          const value = values[name] ?? mapping[name].initial ?? undefined;
+          if (value) {
+            let newAssignment;
+            if (typeof value === 'string') {
+              newAssignment = `${name}="${value}" # @param`;
+            } else if (typeof value === 'boolean') {
+              newAssignment = `${name}=${value ? 'True' : 'False'} # @param`;
+            } else {
+              newAssignment = `${name}=${value} # @param`;
             }
+
+            console.debug('Interpolator:interpolateParams ', `${line} => ${newAssignment}`);
+            return interpolated.length === 0
+              ? `${newAssignment}`
+              : `${interpolated}\n${newAssignment}`;
           }
         }
-        return interpolated.length === 0 ? line : `${interpolated}\n${line}`;
-      }, "");
+      }
+      return interpolated.length === 0 ? line : `${interpolated}\n${line}`;
+    }, '');
     return result;
   }
 

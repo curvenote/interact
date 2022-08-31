@@ -10,7 +10,8 @@
       "outputs": ["build/**"]
     },
     "build#demo-remix": {
-      "dependsOn": ["common", "thebe-redux"]
+      "dependsOn": ["common", "thebe-redux"],
+      "outputs": []
     },
     "build#demo-web": {
       "dependsOn": ["common", "thebe-redux"]

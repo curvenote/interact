@@ -6,7 +6,9 @@
   "scripts": {
     "build": "turbo run build",
     "build:fourier": "turbo run build --filter=demo-fourier",
+    "build:remix": "turbo run build --filter=demo-remix",
     "start:fourier": "turbo run start --filter=demo-fourier",
+    "start:remix": "turbo run start --filter=demo-remix",
     "test": "turbo run test"
   },
   "repository": {

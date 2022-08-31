@@ -61,11 +61,13 @@ const sessions = createSlice({
     },
     activate: activateReducerCase,
     remove: (state, action: PayloadAction<{ id: string }>) => {
+      // TODO remove should be primarily performed via thunk, so we can use runtime objectsto dispose of resources
       const { id } = action.payload;
       if (id in state) return Object.fromEntries(Object.entries(state).filter(([k]) => k !== id));
       return state;
     },
     clear: () => {
+      // TODO clear thunk should also dispose of runtimee objects
       return {};
     },
   },
