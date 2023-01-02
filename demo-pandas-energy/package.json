@@ -18,7 +18,7 @@
     "@types/react-dom": "^17.0.11",
     "classnames": "^2.3.1",
     "common": "file:.yalc/common",
-    "json5": "^2.2.0",
+    "json5": "^2.2.2",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "react": "^17.0.2",
