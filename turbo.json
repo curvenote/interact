@@ -1,0 +1,28 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "build#demo-fourier": {
+      "dependsOn": ["common", "thebe-redux"],
+      "outputs": ["build/**"]
+    },
+    "build#demo-remix": {
+      "dependsOn": ["common", "thebe-redux"],
+      "outputs": []
+    },
+    "build#demo-web": {
+      "dependsOn": ["common", "thebe-redux"]
+    },
+    "start": {
+      "dependsOn": ["^build"],
+      "outputs": [],
+      "cache": false
+    },
+    "lint": {
+      "outputs": []
+    }
+  }
+}

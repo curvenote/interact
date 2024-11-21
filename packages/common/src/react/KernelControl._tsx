@@ -1,0 +1,114 @@
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+// import { Server, selectors as thebeSelectors } from 'thebe-core';
+// import { KernelStatus } from 'thebe-core/dist/store/kernels';
+// import { ServerStatus } from 'thebe-core/dist/store/servers';
+import { selectors, connect } from '../redux';
+// import { State } from '../redux/types';
+import { connectToKernel, connectToLocalServer, connectToPublicBinder } from '../utils';
+
+function KernelPanel() {
+  const dispatch = useDispatch();
+
+  const activeServerId = useSelector(selectors.getActiveServerId);
+  const activeKernelId = useSelector(selectors.getActiveKernelId);
+
+  const clickConnectBinder = async () => {
+    const server = await connectToPublicBinder();
+    dispatch(connect.actions.setActiveServerId(server.id));
+  };
+
+  const clickConnectJupyter = async () => {
+    const server = await connectToLocalServer();
+    dispatch(connect.actions.setActiveServerId(server.id));
+  };
+
+  const clickConnectKernel = async (name: string) => {
+    if (activeServerId == null) return;
+    const kernel = await connectToKernel(activeServerId, name);
+    dispatch(connect.actions.setActiveKernelId(kernel.id));
+  };
+
+  const defaultKernelName = useSelector((state: State) =>
+    thebeSelectors.servers.getDefaultKernelName(state, activeServerId ?? ''),
+  );
+
+  const kernelNames = useSelector((state: State) =>
+    thebeSelectors.servers.getKernelNames(state, activeServerId ?? ''),
+  );
+
+  const serverInfo = useSelector((state: State) => {
+    if (!activeServerId) return;
+    return state.thebe.servers[activeServerId];
+  });
+
+  const kernelInfo = useSelector((state: State) => {
+    if (!activeKernelId) return;
+    return state.thebe.kernels[activeKernelId] ?? {};
+  });
+
+  const serverReady = serverInfo?.status === ServerStatus.ready;
+  useEffect(() => {
+    if (activeServerId == null) return;
+    Server.fetchKernelNames(activeServerId);
+  }, [activeServerId, serverReady]);
+
+  const kernelButtons = kernelNames.map((name: string) => {
+    return (
+      <button
+        key={name}
+        title="click to connect"
+        onClick={() => clickConnectKernel(name)}
+        disabled={!!activeKernelId}
+      >
+        {name === defaultKernelName ? `${name}*` : name}
+      </button>
+    );
+  });
+
+  const kernelStatusColor = kernelInfo?.status === KernelStatus.ready ? 'green' : 'orange';
+
+  return (
+    <div className="kernel-panel">
+      <div>Servers:</div>
+      <div>
+        <button onClick={clickConnectBinder} disabled={!!serverInfo}>
+          connect to binder
+        </button>
+        <button onClick={clickConnectJupyter} disabled={!!serverInfo}>
+          connect to jupyter (local)
+        </button>
+        {serverInfo?.status && (
+          <div style={{ fontSize: '80%' }}>
+            <div>Status: {serverInfo?.status}</div>
+            <div>{serverInfo?.message}</div>
+          </div>
+        )}
+      </div>
+      {kernelNames.length > 0 && (
+        <div>
+          <div>Available Kernels:</div>
+          <div>{kernelButtons}</div>
+        </div>
+      )}
+      {kernelInfo?.status && (
+        <div>
+          <div style={{ color: kernelStatusColor }}>Status: {kernelInfo?.status}</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function KernelControl() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="kernel-control">
+      <button onClick={() => setOpen(!open)}>{'>o<'}</button>
+      {open && <KernelPanel />}
+    </div>
+  );
+}
+
+export default KernelControl;

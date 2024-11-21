@@ -1,0 +1,79 @@
+import type { AnyAction } from '@reduxjs/toolkit';
+import { getContext, selectors as thebeSelectors } from 'thebe-redux';
+import { selectors } from './connect';
+import debounce from 'lodash.debounce';
+// import type { ValueMap } from '../Interpolator';
+// import Interpolator from '../Interpolator';
+
+/**
+ * Logs all actions and states after they are dispatched.
+ */
+export const logger = (store: any) => (next: any) => (action: AnyAction) => {
+  console.info(action.type);
+  console.debug('dispatching', action);
+  const result = next(action);
+  console.debug('next state', store.getState());
+  return result;
+};
+
+const INVOKER_THROTTLE = 150;
+function executeFn(notebookId: string, preprocesor: (s: string) => string) {
+  const ctx = getContext();
+  ctx.notebooks[notebookId].executeAll(preprocesor);
+}
+
+const debouncedExecFn = debounce(executeFn, INVOKER_THROTTLE);
+
+// const interpolator = new Interpolator();
+
+// export const InterpolationInitializer =
+//   (store: any) => (next: any) => (action: AnyAction) => {
+//     const result = next(action);
+//     if (action.type === "connect/setActiveNotebookId") {
+//       const state = store.getState();
+//       interpolator.reset();
+//       const cells = thebeSelectors.notebooks.selectCellsForNotebook(
+//         state,
+//         action.payload
+//       );
+//       interpolator.parseCells(cells);
+//       console.debug("InterpolationInitializer:mapping", interpolator.mapping);
+//     }
+//     return result;
+//   };
+
+export const LivePageInvoker = (store: any) => (next: any) => (action: AnyAction) => {
+  // immediately call next as we want to operate on the final state
+  const result = next(action);
+  if (
+    (action.type === 'COMPONENT_EVENT' && action.payload.name !== 'hover') ||
+    action.type === 'connect/setIsLive'
+  ) {
+    console.debug(`LivePageInvoker:${action.type}`);
+    const state = store.getState();
+
+    console.log('********', result);
+    // get active notebook and execute all
+    const notebookId = selectors.getActiveNotebookId(state);
+    const kernelId = selectors.getActiveKernelId(state);
+
+    // TODO better way to access with types
+    const values = Object.entries(
+      state.runtime.variables as Record<
+        string,
+        { name: string; current: number | string | boolean }
+      >,
+    ).reduce((V, [key, v]) => ({ ...V, [v.name]: v.current }), {} as ValueMap);
+
+    console.debug('interpolating with values', values);
+
+    if (selectors.getActiveKernelId(state)) {
+      if (notebookId && kernelId) {
+        console.debug(`Middleware executing notebook ${notebookId}`);
+        debouncedExecFn(notebookId, interpolator.createPreprocessor(values));
+      }
+    }
+  }
+
+  return result;
+};
